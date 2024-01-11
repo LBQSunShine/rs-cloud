@@ -46,7 +46,7 @@ public class R<T> implements Serializable {
     }
 
     private static <T> R<T> setResult(int code, String message, T data) {
-        R<T> result = new R<>();
+        R<T> result = new R<T>();
         result.setCode(code);
         result.setMessage(message);
         result.setData(data);

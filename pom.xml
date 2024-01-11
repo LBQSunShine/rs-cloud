@@ -25,6 +25,7 @@
         <mysql.version>8.0.30</mysql.version>
         <mybatis-plus.version>3.5.1</mybatis-plus.version>
         <fastjson2.version>2.0.16</fastjson2.version>
+        <redisson.version>3.23.1</redisson.version>
     </properties>
 
     <dependencyManagement>
@@ -89,6 +90,13 @@
                 <groupId>com.alibaba.fastjson2</groupId>
                 <artifactId>fastjson2</artifactId>
                 <version>${fastjson2.version}</version>
+            </dependency>
+
+            <!-- REDISSON -->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redisson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
