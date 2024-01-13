@@ -3,6 +3,7 @@ package com.lbq.config;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +17,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedissonConfig {
 
+    @Value("${spring.redis.host}")
+    private String host;
+    @Value("${spring.redis.port}")
+    private String port;
+    @Value("${spring.redis.password}")
+    private String password;
+
     @Bean
     public RedissonClient redisson() {
         Config config = new Config();
-        config.useSingleServer().setAddress("redis://127.0.0.1:6379");
-        config.useSingleServer().setPassword("xxxx");
+        String address = "redis://" + host + ":" + port;
+        config.useSingleServer().setAddress(address);
+        config.useSingleServer().setPassword(password);
         return Redisson.create(config);
     }
 }

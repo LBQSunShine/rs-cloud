@@ -1,4 +1,4 @@
-package com.lbq.pojo;
+package com.lbq.vo;
 
 import lombok.Data;
 
