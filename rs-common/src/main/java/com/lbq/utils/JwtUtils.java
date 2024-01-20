@@ -5,6 +5,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.lbq.constants.TokenConstants;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.Map;
@@ -30,7 +32,8 @@ public class JwtUtils {
     public static String sign(Map<String, Object> claims) {
         Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
         Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
-        return JWT.create().withClaim(CLAIMS_KEY, claims).withExpiresAt(date).sign(algorithm);
+        String sign = JWT.create().withClaim(CLAIMS_KEY, claims).withExpiresAt(date).sign(algorithm);
+        return TokenConstants.PREFIX + sign;
     }
 
     /**
@@ -66,5 +69,19 @@ public class JwtUtils {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * 获取缓存key
+     *
+     * @param token
+     * @return
+     */
+    public static String getKey(String token) {
+        Map<String, Object> decode = decode(token);
+        if (CollectionUtils.isEmpty(decode)) {
+            return null;
+        }
+        return decode.get(TokenConstants.USER_KEY).toString();
     }
 }

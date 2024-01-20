@@ -1,6 +1,9 @@
 package com.lbq.utils;
 
+import com.lbq.constants.TokenConstants;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 加解密工具
@@ -32,5 +35,19 @@ public class SecurityUtils {
     public static boolean verify(String password, String encodePassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.matches(password, encodePassword);
+    }
+
+    /**
+     * 获取token
+     *
+     * @param request
+     * @return
+     */
+    public static String getToken(HttpServletRequest request) {
+        String token = request.getHeader(TokenConstants.AUTHENTICATION);
+        if (token == null) {
+            return null;
+        }
+        return token.replaceFirst(TokenConstants.PREFIX, "");
     }
 }

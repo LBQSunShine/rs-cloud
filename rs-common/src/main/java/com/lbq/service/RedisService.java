@@ -123,6 +123,11 @@ public class RedisService {
      * @return
      */
     public <T> boolean delete(String key) {
-        return redisTemplate.delete(key);
+        try {
+            redisTemplate.delete(key);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 }

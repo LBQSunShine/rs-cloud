@@ -8,6 +8,8 @@ package com.lbq.constants;
  * @Version: 1.0
  */
 public interface TokenConstants {
+    String PREFIX = "Basic ";
+    String AUTHENTICATION = "Authentication";
     String USER_ID = "id";
     String USER_KEY = "key";
     String USER_USER_NAME = "username";

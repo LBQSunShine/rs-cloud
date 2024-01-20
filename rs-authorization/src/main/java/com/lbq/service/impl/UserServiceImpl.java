@@ -83,6 +83,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         super.save(user);
     }
 
+    @Override
+    public void logout(String token) {
+        String key = JwtUtils.getKey(token);
+        redisService.delete(key);
+    }
+
     private User getByUsername(String username) {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper
