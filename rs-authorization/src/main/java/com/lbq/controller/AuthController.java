@@ -7,7 +7,10 @@ import com.lbq.vo.LoginVo;
 import com.lbq.vo.R;
 import com.lbq.vo.RegisterVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 用户
@@ -31,22 +34,16 @@ public class AuthController {
 
     @PostMapping("/register")
     public R<?> register(@RequestBody RegisterVo registerVo) {
-        userService.register(registerVo.getUsername(), registerVo.getPassword());
-        return R.success("注册成功!");
-    }
-
-    @GetMapping("/get")
-    public R<?> get() {
+        try {
+            userService.register(registerVo.getUsername(), registerVo.getPassword());
+        } catch (Exception e) {
+            throw new RuntimeException("账号已注册!");
+        }
         return R.success("注册成功!");
     }
 
 //    @PostMapping("/logout")
 //    public R<?> logout(HttpServletRequest request) {
-//
-//    }
-//
-//    @PostMapping("/register")
-//    public R<?> register(@RequestBody LoginVo loginVo) {
 //
 //    }
 //

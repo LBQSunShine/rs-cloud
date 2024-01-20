@@ -45,7 +45,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new RuntimeException("账号或密码错误!");
         }
         Integer id = user.getId();
-        String nickname = user.getNickname();
+        String nickname = user.getNickname() == null ? "" : user.getNickname();
         String uuid = UUIDUtils.getUUID();
         Map<String, Object> claims = new HashMap<>();
         claims.put(TokenConstants.USER_ID, id);
@@ -80,10 +80,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new User();
         user.setUsername(username);
         user.setPassword(encrypt);
-        boolean save = super.save(user);
-        if (!save) {
-            throw new RuntimeException("账号已存在!");
-        }
+        super.save(user);
     }
 
     private User getByUsername(String username) {
