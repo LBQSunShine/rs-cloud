@@ -1,0 +1,18 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: system
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        server-addr: localhost:8848
+        file-extension: yml
+        shared-configs:
+          - data-id: ${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+      username: nacos
+      password: nacos

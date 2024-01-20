@@ -12,6 +12,7 @@
         <module>rs-gateway</module>
         <module>rs-common</module>
         <module>rs-authorization</module>
+        <module>rs-modules</module>
     </modules>
 
     <properties>
