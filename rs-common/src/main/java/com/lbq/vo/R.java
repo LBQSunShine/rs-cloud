@@ -45,6 +45,10 @@ public class R<T> implements Serializable {
         return setResult(FAIL, message, null);
     }
 
+    public static <T> R<T> fail(int code, String message) {
+        return setResult(code, message, null);
+    }
+
     private static <T> R<T> setResult(int code, String message, T data) {
         R<T> result = new R<T>();
         result.setCode(code);

@@ -14,4 +14,5 @@ public interface TokenConstants {
     String USER_KEY = "key";
     String USER_USER_NAME = "username";
     String USER_NICK_NAME = "nickname";
+    String FROM = "FROM";
 }
