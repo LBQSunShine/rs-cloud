@@ -37,4 +37,13 @@ public interface UserService extends IService<User> {
      * @param token
      */
     void logout(String token);
+
+    /**
+     * 修改密码
+     *
+     * @param username
+     * @param password
+     * @param newPassword
+     */
+    void editPassword(String username, String password, String newPassword);
 }

@@ -1,6 +1,7 @@
 package com.lbq.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.constants.RoleConstants;
@@ -9,14 +10,15 @@ import com.lbq.mapper.UserMapper;
 import com.lbq.openfeign.RoleServiceOpenfeign;
 import com.lbq.pojo.User;
 import com.lbq.service.RedisService;
+import com.lbq.service.RedissonService;
 import com.lbq.service.UserService;
 import com.lbq.utils.JwtUtils;
 import com.lbq.utils.SecurityUtils;
 import com.lbq.utils.UUIDUtils;
 import com.lbq.vo.LoginUser;
-import io.seata.core.exception.TransactionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +35,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private RedissonService redissonService;
     @Autowired
     private RoleServiceOpenfeign roleServiceOpenfeign;
 
@@ -69,7 +73,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void register(String username, String password) throws TransactionException {
+    public void register(String username, String password) {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             throw new RuntimeException("请输入账号或密码!");
         }
@@ -95,6 +99,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void logout(String token) {
         String key = JwtUtils.getKey(token);
         redisService.delete(key);
+    }
+
+    @Override
+    @Transactional
+    public void editPassword(String username, String password, String newPassword) {
+        if (StringUtils.isBlank(password)) {
+            throw new RuntimeException("请输入当前密码!");
+        }
+        if (StringUtils.isBlank(newPassword)) {
+            throw new RuntimeException("请输入新密码!");
+        }
+        int length = newPassword.length();
+        if (length < 5 || length > 20) {
+            throw new RuntimeException("密码长度必须在5到20个字符之间!");
+        }
+        if (password.equals(newPassword)) {
+            throw new RuntimeException("新密码与当前密码相同!");
+        }
+        redissonService.tryLockExecute(username, () -> {
+            User user = this.getByUsername(username);
+            boolean verify = SecurityUtils.verify(password, user.getPassword());
+            if (!verify) {
+                throw new RuntimeException("当前密码错误!");
+            }
+            String encrypt = SecurityUtils.encrypt(newPassword);
+            LambdaUpdateWrapper<User> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper
+                    .eq(User::getUsername, username)
+                    .set(User::getPassword, encrypt);
+            super.update(updateWrapper);
+            return true;
+        });
     }
 
     private User getByUsername(String username) {

@@ -15,10 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2024-01-21
  */
 @Service
-@Transactional
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Override
+    @Transactional
     public void edit(User user) {
         LambdaUpdateWrapper<User> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper
@@ -26,6 +26,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set(User::getNickname, user.getNickname())
                 .set(User::getEmail, user.getEmail())
                 .set(User::getPhone, user.getPhone())
+                .set(User::getAvatar, user.getAvatar())
                 .set(User::getSex, user.getSex());
         boolean update = super.update(updateWrapper);
         if (!update) {

@@ -3,10 +3,7 @@ package com.lbq.controller;
 
 import com.lbq.service.UserService;
 import com.lbq.utils.SecurityUtils;
-import com.lbq.vo.LoginUser;
-import com.lbq.vo.LoginVo;
-import com.lbq.vo.R;
-import com.lbq.vo.RegisterVo;
+import com.lbq.vo.*;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,5 +55,11 @@ public class AuthController {
 //    public R<?> refresh(@RequestBody LoginVo loginVo) {
 //
 //    }
+
+    @PostMapping("/editPassword")
+    public R<?> editPassword(@RequestBody PasswordVo passwordVo) {
+        userService.editPassword(passwordVo.getUsername(), passwordVo.getPassword(), passwordVo.getNewPassword());
+        return R.success("修改成功!");
+    }
 }
 
