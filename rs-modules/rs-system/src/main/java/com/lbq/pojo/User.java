@@ -30,15 +30,13 @@ public class User implements Serializable {
 
     private String password;
 
+    private String avatar;
+
     private String sex;
 
     private String email;
 
     private String phone;
 
-    private String role;
-
     private String status;
-
-
 }

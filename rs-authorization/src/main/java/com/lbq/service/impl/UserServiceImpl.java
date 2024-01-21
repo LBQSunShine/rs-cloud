@@ -3,8 +3,10 @@ package com.lbq.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lbq.constants.RoleConstants;
 import com.lbq.constants.TokenConstants;
 import com.lbq.mapper.UserMapper;
+import com.lbq.openfeign.RoleServiceOpenfeign;
 import com.lbq.pojo.User;
 import com.lbq.service.RedisService;
 import com.lbq.service.UserService;
@@ -12,6 +14,7 @@ import com.lbq.utils.JwtUtils;
 import com.lbq.utils.SecurityUtils;
 import com.lbq.utils.UUIDUtils;
 import com.lbq.vo.LoginUser;
+import io.seata.core.exception.TransactionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +33,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private RoleServiceOpenfeign roleServiceOpenfeign;
 
     @Override
     public LoginUser login(String username, String password) {
@@ -64,7 +69,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void register(String username, String password) {
+    public void register(String username, String password) throws TransactionException {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             throw new RuntimeException("请输入账号或密码!");
         }
@@ -80,7 +85,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new User();
         user.setUsername(username);
         user.setPassword(encrypt);
-        super.save(user);
+        boolean save = super.save(user);
+        if (save) {
+            roleServiceOpenfeign.addUserRole(user.getId(), RoleConstants.NORMAL);
+        }
     }
 
     @Override

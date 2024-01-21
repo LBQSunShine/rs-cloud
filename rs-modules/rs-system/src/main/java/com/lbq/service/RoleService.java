@@ -11,4 +11,11 @@ import com.lbq.pojo.Role;
  */
 public interface RoleService extends IService<Role> {
 
+    /**
+     * 根据编码查询角色
+     *
+     * @param code
+     * @return
+     */
+    Role getByCode(String code);
 }

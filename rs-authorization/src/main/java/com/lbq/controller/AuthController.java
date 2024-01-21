@@ -7,6 +7,7 @@ import com.lbq.vo.LoginUser;
 import com.lbq.vo.LoginVo;
 import com.lbq.vo.R;
 import com.lbq.vo.RegisterVo;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,7 @@ public class AuthController {
         return R.success(loginUser);
     }
 
+    @GlobalTransactional
     @PostMapping("/register")
     public R<?> register(@RequestBody RegisterVo registerVo) {
         try {

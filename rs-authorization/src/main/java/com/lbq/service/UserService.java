@@ -3,6 +3,7 @@ package com.lbq.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lbq.pojo.User;
 import com.lbq.vo.LoginUser;
+import io.seata.core.exception.TransactionException;
 
 /**
  * 用户
@@ -28,7 +29,7 @@ public interface UserService extends IService<User> {
      * @param username
      * @param password
      */
-    void register(String username, String password);
+    void register(String username, String password) throws TransactionException;
 
     /**
      * 退出登录

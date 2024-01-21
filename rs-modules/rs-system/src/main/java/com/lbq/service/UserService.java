@@ -11,4 +11,10 @@ import com.lbq.pojo.User;
  */
 public interface UserService extends IService<User> {
 
+    /**
+     * 编辑基本信息
+     *
+     * @param user
+     */
+    void edit(User user);
 }
