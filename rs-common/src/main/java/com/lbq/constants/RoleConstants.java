@@ -1,7 +1,7 @@
 package com.lbq.constants;
 
 /**
- * 角色
+ * 角色常量
  *
  * @Author lbq
  * @Date 2024/1/21
