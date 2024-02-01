@@ -1,9 +1,7 @@
 package com.lbq.controller;
 
 
-import com.alibaba.cloud.commons.lang.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lbq.constants.StatusConstants;
 import com.lbq.function.ActionFunction;
@@ -13,7 +11,6 @@ import com.lbq.utils.IdsReq;
 import com.lbq.utils.StringFormatUtils;
 import com.lbq.vo.PageVo;
 import com.lbq.vo.R;
-import com.lbq.vo.SortField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,34 +25,15 @@ import java.util.List;
  * @since 2024-01-30
  */
 @RestController
-@RequestMapping("/tag")
+@RequestMapping("/sys/tag")
 public class TagController {
 
     @Autowired
     private TagService tagService;
 
     @GetMapping("/page")
-    public R<?> page(PageVo pageVo,
-                     @RequestParam(name = "keyword", required = false) String keyword) {
-        Page<Tag> page = new Page<>(pageVo.getPageNo(), pageVo.getPageSize());
-        QueryWrapper<Tag> queryWrapper = new QueryWrapper<>();
-        if (StringUtils.isNotBlank(keyword)) {
-            queryWrapper.lambda().and(wrapper -> {
-                wrapper.like(Tag::getCode, keyword)
-                        .or()
-                        .like(Tag::getName, keyword);
-            });
-        }
-        String sortField = pageVo.getSortField();
-        if (StringUtils.isNotBlank(sortField)) {
-            String sortType = pageVo.getSortType();
-            if (SortField.ASC.equals(sortType)) {
-                queryWrapper.orderByAsc(sortField);
-            } else {
-                queryWrapper.orderByDesc(sortField);
-            }
-        }
-        Page<Tag> res = tagService.page(page, queryWrapper);
+    public R<?> page(PageVo pageVo, @RequestParam(name = "keyword", required = false) String keyword) {
+        Page<Tag> res = tagService.page(pageVo, keyword);
         return R.success(res);
     }
 

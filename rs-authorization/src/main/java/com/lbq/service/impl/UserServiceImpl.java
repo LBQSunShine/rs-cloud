@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.constants.RoleConstants;
+import com.lbq.constants.StatusConstants;
 import com.lbq.constants.TokenConstants;
 import com.lbq.mapper.UserMapper;
 import com.lbq.openfeign.RoleServiceOpenfeign;
@@ -89,6 +90,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new User();
         user.setUsername(username);
         user.setPassword(encrypt);
+        user.setStatus(StatusConstants.ENABLE);
         boolean save = super.save(user);
         if (save) {
             roleServiceOpenfeign.addUserRole(user.getId(), RoleConstants.NORMAL);
