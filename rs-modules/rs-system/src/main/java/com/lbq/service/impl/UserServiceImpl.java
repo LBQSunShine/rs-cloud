@@ -3,16 +3,27 @@ package com.lbq.service.impl;
 import com.alibaba.cloud.commons.lang.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.constants.StatusConstants;
 import com.lbq.mapper.UserMapper;
+import com.lbq.pojo.Role;
 import com.lbq.pojo.User;
+import com.lbq.pojo.UserRole;
+import com.lbq.service.RoleService;
+import com.lbq.service.UserRoleService;
 import com.lbq.service.UserService;
 import com.lbq.vo.PageVo;
 import com.lbq.vo.SortField;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 用户
@@ -22,6 +33,11 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private UserRoleService userRoleService;
 
     @Override
     public Page<User> page(PageVo pageVo, String keyword) {
@@ -44,7 +60,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
         }
         Page<User> res = super.page(page, queryWrapper);
+        this.setView(res.getRecords());
         return res;
+    }
+
+    @Override
+    public void setView(List<User> users) {
+        if (CollectionUtils.isEmpty(users)) {
+            return;
+        }
+        Set<Integer> userIds = users.stream().map(User::getId).collect(Collectors.toSet());
+        List<UserRole> userRoles = userRoleService.listByUserIds(userIds);
+        Map<Integer, List<UserRole>> userRoleMap = userRoles.stream().collect(Collectors.groupingBy(UserRole::getUserId));
+        Set<Integer> roleIds = userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toSet());
+        Map<Integer, Role> roleMap = roleService.getMapByIds(roleIds);
+        for (User record : users) {
+            Integer id = record.getId();
+            List<UserRole> recordURs = userRoleMap.get(id);
+            for (UserRole ur : recordURs) {
+                Integer roleId = ur.getRoleId();
+                Role role = roleMap.get(roleId);
+                if (role != null) {
+                    String roles = record.getRoles();
+                    if (StringUtils.isBlank(roles)) {
+                        roles = role.getName();
+                    } else {
+                        roles = "," + role.getName();
+                    }
+                    record.setRoles(roles);
+                }
+            }
+        }
     }
 
     @Override

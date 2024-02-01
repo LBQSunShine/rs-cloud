@@ -3,6 +3,9 @@ package com.lbq.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lbq.pojo.Role;
 
+import java.util.Collection;
+import java.util.Map;
+
 /**
  * 角色
  *
@@ -18,4 +21,6 @@ public interface RoleService extends IService<Role> {
      * @return
      */
     Role getByCode(String code);
+
+    Map<Integer, Role> getMapByIds(Collection<Integer> ids);
 }
