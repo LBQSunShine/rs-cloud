@@ -30,7 +30,7 @@ public class AuthController {
     @PostMapping("/login")
     public R<?> login(@RequestBody LoginVo loginVo) {
         LoginUser loginUser = userService.login(loginVo.getUsername(), loginVo.getPassword());
-        return R.success(loginUser);
+        return R.success("登录成功!", loginUser);
     }
 
     @GlobalTransactional

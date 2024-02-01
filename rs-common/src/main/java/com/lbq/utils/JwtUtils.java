@@ -19,7 +19,7 @@ import java.util.Map;
  * @Version: 1.0
  */
 public class JwtUtils {
-    private static final long EXPIRE_TIME = 60 * 1000;
+    private static final long EXPIRE_TIME = 10 * 60 * 1000;
     private static final String SECRET_KEY = "sasjhduedhbsh!2";
     private static final String CLAIMS_KEY = "key";
 
