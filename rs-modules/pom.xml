@@ -12,8 +12,8 @@
     <artifactId>rs-modules</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>rs-file</module>
         <module>rs-system-root</module>
+        <module>rs-file-root</module>
     </modules>
 
     <properties>
