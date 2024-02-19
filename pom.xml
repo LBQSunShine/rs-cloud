@@ -13,7 +13,6 @@
         <module>rs-common</module>
         <module>rs-authorization</module>
         <module>rs-modules</module>
-        <module>rs-api</module>
     </modules>
 
     <properties>
