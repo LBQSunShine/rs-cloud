@@ -1,4 +1,4 @@
-package com.lbq.api;
+package com.lbq.openfeign;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
