@@ -10,6 +10,7 @@ import com.lbq.mapper.ScheduleJobMapper;
 import com.lbq.pojo.ScheduleJob;
 import com.lbq.service.ScheduleJobService;
 import com.lbq.utils.CronUtils;
+import com.lbq.utils.ScheduleUtils;
 import com.lbq.vo.PageVo;
 import com.lbq.vo.SortField;
 import org.quartz.Scheduler;
@@ -66,6 +67,6 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
         if (!save) {
             throw new RuntimeException("调度任务创建失败!");
         }
-
+        ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
     }
 }
