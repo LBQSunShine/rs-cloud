@@ -15,4 +15,6 @@ public interface ScheduleJobService {
     Page<ScheduleJob> page(PageVo pageVo, String keyword);
 
     void add(ScheduleJob scheduleJob);
+
+    void run(ScheduleJob scheduleJob);
 }

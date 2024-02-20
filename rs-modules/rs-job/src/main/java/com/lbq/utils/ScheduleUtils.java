@@ -14,7 +14,9 @@ public class ScheduleUtils {
 
     public static void createScheduleJob(Scheduler scheduler, ScheduleJob scheduleJob) {
         Integer id = scheduleJob.getId();
-        String jobId = String.valueOf(id);
+        String jobGroup = scheduleJob.getJobGroup();
+        JobKey jobKey = getJobKey(id, jobGroup);
+        TriggerKey triggerKey = getTriggerKey(id, jobGroup);
         String invokeTarget = scheduleJob.getInvokeTarget();
         String cronExpression = scheduleJob.getCronExpression();
         try {
@@ -23,12 +25,12 @@ public class ScheduleUtils {
             // 构建job信息
             JobDetail jobDetail = JobBuilder
                     .newJob(getClass(invokeTarget).getClass())
-                    .withIdentity(jobId)
+                    .withIdentity(jobKey)
                     .build();
             // 表达式调度构建器(即任务执行的时间)
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
             // 按新的cronExpression表达式构建一个新的trigger
-            CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobId).withSchedule(scheduleBuilder).build();
+            CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
             throw new RuntimeException("调度任务创建失败!");
@@ -40,5 +42,15 @@ public class ScheduleUtils {
     private static Job getClass(String classname) throws Exception {
         Class<?> clazz = Class.forName(classname);
         return (Job) clazz.newInstance();
+    }
+
+    public static JobKey getJobKey(Integer id, String jobGroup) {
+        String jobId = String.valueOf(id);
+        return JobKey.jobKey(jobId, jobGroup);
+    }
+
+    public static TriggerKey getTriggerKey(Integer id, String jobGroup) {
+        String jobId = String.valueOf(id);
+        return TriggerKey.triggerKey(jobId, jobGroup);
     }
 }

@@ -13,12 +13,16 @@ import com.lbq.utils.CronUtils;
 import com.lbq.utils.ScheduleUtils;
 import com.lbq.vo.PageVo;
 import com.lbq.vo.SortField;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 调度
@@ -32,6 +36,18 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
 
     @Autowired
     private Scheduler scheduler;
+
+    /**
+     * 项目启动时，初始化定时器 主要是防止手动修改数据库导致未同步到定时任务处理（注：不能手动修改数据库ID和任务组名，否则会导致脏数据）
+     */
+    @PostConstruct
+    public void init() throws SchedulerException {
+        scheduler.clear();
+        List<ScheduleJob> jobList = super.list();
+        for (ScheduleJob scheduleJob : jobList) {
+            ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
+        }
+    }
 
     @Override
     public Page<ScheduleJob> page(PageVo pageVo, String keyword) {
@@ -68,5 +84,21 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
             throw new RuntimeException("调度任务创建失败!");
         }
         ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
+    }
+
+    @Override
+    public void run(ScheduleJob scheduleJob) {
+        ScheduleJob job = super.getById(scheduleJob.getId());
+        if (job == null) {
+            throw new RuntimeException("调度任务不存在!");
+        }
+        try {
+            JobKey jobKey = ScheduleUtils.getJobKey(job.getId(), job.getJobGroup());
+            if (scheduler.checkExists(jobKey)) {
+                scheduler.triggerJob(jobKey);
+            }
+        } catch (SchedulerException e) {
+            throw new RuntimeException("调度任务不存在!");
+        }
     }
 }

@@ -34,5 +34,11 @@ public class ScheduleJobController {
         return R.success("新增成功!");
     }
 
+    @PostMapping("/run")
+    public R<?> run(@RequestBody ScheduleJob scheduleJob) {
+        scheduleJobService.run(scheduleJob);
+        return R.success("执行成功!");
+    }
+
 }
 
