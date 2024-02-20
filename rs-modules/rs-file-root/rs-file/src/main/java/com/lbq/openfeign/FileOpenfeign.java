@@ -1,4 +1,4 @@
-package com.lbq.controller;
+package com.lbq.openfeign;
 
 import com.lbq.service.FileService;
 import com.lbq.vo.FileVo;
@@ -16,8 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
  * @Version: 1.0
  */
 @RestController
-@RequestMapping("/file")
-public class FileController {
+@RequestMapping("/file/openfeign")
+public class FileOpenfeign {
 
     @Autowired
     private FileService fileService;

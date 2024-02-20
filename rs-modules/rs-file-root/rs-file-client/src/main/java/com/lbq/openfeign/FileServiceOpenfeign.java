@@ -16,6 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 @FeignClient(value = "file")
 public interface FileServiceOpenfeign {
-    @PostMapping("/file/upload")
+    @PostMapping("/file/openfeign/upload")
     FileVo upload(MultipartFile file);
 }
