@@ -22,7 +22,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("rs_job_log")
-public class JobLog implements Serializable {
+public class ScheduleJobLog implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;

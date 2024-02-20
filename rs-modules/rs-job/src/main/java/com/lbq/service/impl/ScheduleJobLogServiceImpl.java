@@ -1,9 +1,9 @@
 package com.lbq.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lbq.mapper.JobLogMapper;
-import com.lbq.pojo.JobLog;
-import com.lbq.service.JobLogService;
+import com.lbq.mapper.ScheduleJobLogMapper;
+import com.lbq.pojo.ScheduleJobLog;
+import com.lbq.service.ScheduleJobLogService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class JobLogServiceImpl extends ServiceImpl<JobLogMapper, JobLog> implements JobLogService {
+public class ScheduleJobLogServiceImpl extends ServiceImpl<ScheduleJobLogMapper, ScheduleJobLog> implements ScheduleJobLogService {
 
 
 }

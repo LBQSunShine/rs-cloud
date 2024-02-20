@@ -1,7 +1,7 @@
 package com.lbq.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lbq.pojo.Job;
+import com.lbq.pojo.ScheduleJob;
 import com.lbq.vo.PageVo;
 
 /**
@@ -11,6 +11,8 @@ import com.lbq.vo.PageVo;
  * @Date: 2024-02-20
  * @Version: 1.0
  */
-public interface JobService {
-    Page<Job> page(PageVo pageVo, String keyword);
+public interface ScheduleJobService {
+    Page<ScheduleJob> page(PageVo pageVo, String keyword);
+
+    void add(ScheduleJob scheduleJob);
 }

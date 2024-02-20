@@ -2,15 +2,12 @@ package com.lbq.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lbq.pojo.Job;
-import com.lbq.service.JobService;
+import com.lbq.pojo.ScheduleJob;
+import com.lbq.service.ScheduleJobService;
 import com.lbq.vo.PageVo;
 import com.lbq.vo.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 调度
@@ -20,15 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/job")
-public class JobController {
+public class ScheduleJobController {
 
     @Autowired
-    private JobService jobService;
+    private ScheduleJobService scheduleJobService;
 
     @GetMapping("/page")
     public R<?> page(PageVo pageVo, @RequestParam(name = "keyword", required = false) String keyword) {
-        Page<Job> res = jobService.page(pageVo, keyword);
+        Page<ScheduleJob> res = scheduleJobService.page(pageVo, keyword);
         return R.success(res);
+    }
+
+    @PostMapping("/add")
+    public R<?> add(@RequestBody ScheduleJob scheduleJob) {
+        scheduleJobService.add(scheduleJob);
+        return R.success("新增成功!");
     }
 
 }

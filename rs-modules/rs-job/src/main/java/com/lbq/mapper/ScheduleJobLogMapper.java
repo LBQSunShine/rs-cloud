@@ -1,7 +1,7 @@
 package com.lbq.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lbq.pojo.JobLog;
+import com.lbq.pojo.ScheduleJobLog;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2024-02-20
  */
 @Mapper
-public interface JobLogMapper extends BaseMapper<JobLog> {
+public interface ScheduleJobLogMapper extends BaseMapper<ScheduleJobLog> {
 
 }

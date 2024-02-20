@@ -7,5 +7,5 @@ package com.lbq.service;
  * @Date: 2024-02-20
  * @Version: 1.0
  */
-public interface JobLogService {
+public interface ScheduleJobLogService {
 }
