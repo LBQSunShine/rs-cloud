@@ -2,11 +2,7 @@ package com.lbq.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lbq.function.ActionFunction;
-import com.lbq.pojo.Role;
 import com.lbq.pojo.User;
-import com.lbq.pojo.UserRole;
-import com.lbq.service.RoleService;
-import com.lbq.service.UserRoleService;
 import com.lbq.service.UserService;
 import com.lbq.utils.IdsReq;
 import com.lbq.utils.StringFormatUtils;
@@ -30,10 +26,6 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
-    @Autowired
-    private RoleService roleService;
-    @Autowired
-    private UserRoleService userRoleService;
 
     @GetMapping("/page")
     public R<?> page(PageVo pageVo, @RequestParam(name = "keyword", required = false) String keyword) {
@@ -47,14 +39,6 @@ public class UserController {
         return R.success("修改成功!");
     }
 
-    @PostMapping("/addUserRole")
-    public void addUserRole(@RequestParam(name = "userId") Integer userId, @RequestParam(name = "roleCode") String roleCode) {
-        Role role = roleService.getByCode(roleCode);
-        UserRole userRole = new UserRole();
-        userRole.setUserId(userId);
-        userRole.setRoleId(role.getId());
-        userRoleService.save(userRole);
-    }
 
     @PostMapping("/enable")
     public R<?> enable(@RequestBody IdsReq idsReq) {

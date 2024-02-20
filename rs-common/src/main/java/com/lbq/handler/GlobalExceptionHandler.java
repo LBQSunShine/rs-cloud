@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Date 2024/1/13
  * @Version: 1.0
  */
-@ControllerAdvice
+@ControllerAdvice(basePackages = {"com.lbq.controller"})
 @ResponseBody
 public class GlobalExceptionHandler {
 
