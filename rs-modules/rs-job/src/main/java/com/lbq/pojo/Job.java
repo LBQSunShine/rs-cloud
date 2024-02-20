@@ -24,4 +24,14 @@ public class Job implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    private String jobName;
+
+    private String jobGroup;
+
+    private String invokeTarget;
+
+    private String cronExpression;
+
+    private String status;
+
 }
