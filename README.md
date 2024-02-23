@@ -7,6 +7,8 @@
 * 网关权限认证使用Spring Cloud Gateway、Redis
 * 数据缓存使用Redis、分布式锁使用Redisson
 * 分布式事务选型Seata
+* 流量控制框架选型Sentinel
+* 微服务统一日志ELK
 #### 系统模块
 ```java
 rs-cloud
