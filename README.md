@@ -1,6 +1,13 @@
 ### 资源分享平台
-#### 平台介绍
-
+#### 开发模式、技术选型
+* 前后端分离模式开发
+* 后端开发框架采用Spring Boot、Spring Cloud、Spring Cloud Alibaba、Mybatis-Plus
+* 数据库选择Mysql
+* 注册中心、配置中心选型Nacos
+* 网关权限认证使用Spring Cloud Gateway、Redis
+* 数据缓存使用Redis、分布式锁使用Redisson
+* 分布式事务选型Seata
+#### 系统模块
 ```java
 rs-cloud
 |——rs-authorization     认证中心
