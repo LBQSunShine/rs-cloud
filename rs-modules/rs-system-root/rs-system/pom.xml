@@ -67,26 +67,9 @@
         </dependency>
         <dependency>
             <groupId>org.lbq</groupId>
-            <artifactId>rs-common</artifactId>
+            <artifactId>rs-common-global</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <exclude>bootstrap.yml</exclude>
-                </excludes>
-            </resource>
-        </resources>
-    </build>
 
 </project>

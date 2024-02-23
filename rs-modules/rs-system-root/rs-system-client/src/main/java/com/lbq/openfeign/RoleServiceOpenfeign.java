@@ -1,5 +1,6 @@
 package com.lbq.openfeign;
 
+import com.lbq.config.OpenfeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @Version: 1.0
  */
 @Component
-@FeignClient(value = "system")
+@FeignClient(value = "system", configuration = OpenfeignConfig.class)
 public interface RoleServiceOpenfeign {
 
     @PostMapping("/sys/openfeign/addUserRole")

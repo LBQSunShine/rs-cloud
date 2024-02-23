@@ -51,7 +51,7 @@
         </dependency>
         <dependency>
             <groupId>org.lbq</groupId>
-            <artifactId>rs-common</artifactId>
+            <artifactId>rs-common-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
