@@ -14,6 +14,11 @@
 rs-cloud
 |——rs-authorization     认证中心[8081]
 |——rs-common            公共服务
+        |——rs-common-core       核心模块
+        |——rs-common-global     全局配置
+        |——rs-common-log        日志服务
+        |——rs-common-openfeign  服务调用配置
+        |——rs-common-redis      缓存服务
 |——rs-gateway           网关模块[9000]
 |——rs-modules           业务模块
         |——rs-file-root     文件模块

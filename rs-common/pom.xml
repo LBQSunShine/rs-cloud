@@ -16,6 +16,7 @@
         <module>rs-common-redis</module>
         <module>rs-common-openfeign</module>
         <module>rs-common-global</module>
+        <module>rs-common-log</module>
     </modules>
 
     <properties>

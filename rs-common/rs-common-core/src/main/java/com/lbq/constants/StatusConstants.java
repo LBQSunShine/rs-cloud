@@ -10,4 +10,6 @@ package com.lbq.constants;
 public interface StatusConstants {
     String ENABLE = "enable";
     String DISABLE = "disable";
+    String SUCCESS = "success";
+    String FAIL = "fail";
 }

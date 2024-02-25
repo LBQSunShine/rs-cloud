@@ -8,7 +8,7 @@ import com.lbq.constants.RoleConstants;
 import com.lbq.constants.StatusConstants;
 import com.lbq.constants.TokenConstants;
 import com.lbq.mapper.UserMapper;
-import com.lbq.openfeign.RoleServiceOpenfeign;
+import com.lbq.openfeign.SystemOpenfeign;
 import com.lbq.pojo.User;
 import com.lbq.service.RedisService;
 import com.lbq.service.RedissonService;
@@ -39,7 +39,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private RedissonService redissonService;
     @Autowired
-    private RoleServiceOpenfeign roleServiceOpenfeign;
+    private SystemOpenfeign systemOpenfeign;
 
     @Override
     public LoginUser login(String username, String password) {
@@ -93,7 +93,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setStatus(StatusConstants.ENABLE);
         boolean save = super.save(user);
         if (save) {
-            roleServiceOpenfeign.addUserRole(user.getId(), RoleConstants.NORMAL);
+            systemOpenfeign.addUserRole(user.getId(), RoleConstants.NORMAL);
         }
     }
 

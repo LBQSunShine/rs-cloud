@@ -1,6 +1,7 @@
 package com.lbq.controller;
 
 
+import com.lbq.annotation.Log;
 import com.lbq.service.UserService;
 import com.lbq.utils.SecurityUtils;
 import com.lbq.vo.*;
@@ -35,6 +36,7 @@ public class AuthController {
 
     @GlobalTransactional
     @PostMapping("/register")
+    @Log(title = "注册")
     public R<?> register(@RequestBody RegisterVo registerVo) {
         try {
             userService.register(registerVo.getUsername(), registerVo.getPassword());
