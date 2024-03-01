@@ -3,6 +3,7 @@ package com.lbq.aspect;
 import com.alibaba.cloud.commons.lang.StringUtils;
 import com.lbq.annotation.Log;
 import com.lbq.constants.StatusConstants;
+import com.lbq.context.BaseContext;
 import com.lbq.service.AsyncLogService;
 import com.lbq.vo.OperLogVo;
 import org.aspectj.lang.JoinPoint;
@@ -75,7 +76,7 @@ public class LogAspect {
             String requestURI = request.getRequestURI();
             requestURI = requestURI.length() > 255 ? requestURI.substring(0, 255) : requestURI;
             operLogVo.setOperUrl(requestURI);
-            String username = "admin";
+            String username = BaseContext.getUsername();
             if (StringUtils.isNotBlank(username)) {
                 operLogVo.setOperBy(username);
             }
