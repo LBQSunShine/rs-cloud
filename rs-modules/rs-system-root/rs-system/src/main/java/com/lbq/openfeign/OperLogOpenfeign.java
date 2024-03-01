@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024-02-25
  */
 @RestController
-@RequestMapping("/sys/log")
+@RequestMapping("/sys/openfeign/log")
 public class OperLogOpenfeign {
 
     @Autowired

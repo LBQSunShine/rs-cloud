@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version: 1.0
  */
 @RestController
-@RequestMapping("/sys/openfeign")
+@RequestMapping("/sys/openfeign/user-role")
 public class UserRoleOpenfeign {
 
     @Autowired

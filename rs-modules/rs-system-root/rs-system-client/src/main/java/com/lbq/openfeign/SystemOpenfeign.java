@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "system", configuration = OpenfeignConfig.class)
 public interface SystemOpenfeign {
 
-    @PostMapping("/sys/openfeign/addUserRole")
+    @PostMapping("/sys/openfeign/user-role/addUserRole")
     void addUserRole(@RequestParam(name = "userId") Integer userId, @RequestParam(name = "roleCode") String roleCode);
 
-    @PostMapping("/sys/log/addOperLog")
+    @PostMapping("/sys/openfeign/log/addOperLog")
     void addOperLog(@RequestBody OperLogVo operLogVo);
 }
