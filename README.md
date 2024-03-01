@@ -7,6 +7,9 @@
 * 网关权限认证使用Spring Cloud Gateway、Redis
 * 数据缓存使用Redis、分布式锁使用Redisson
 * 分布式事务选型Seata
+* openfeign实现服务之间调用
+* 自定义注解 + Aop的方式异步记录用户操作数据
+* quartz实现定时任务调度
 * 流量控制框架选型Sentinel
 * 微服务统一日志ELK
 #### 系统模块
