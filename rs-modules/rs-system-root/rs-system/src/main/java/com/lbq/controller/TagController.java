@@ -3,6 +3,7 @@ package com.lbq.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lbq.annotation.Log;
 import com.lbq.constants.StatusConstants;
 import com.lbq.function.ActionFunction;
 import com.lbq.pojo.Tag;
@@ -50,6 +51,7 @@ public class TagController {
 
 
     @PostMapping("/add")
+    @Log(title = "分类新增")
     public R<?> add(@RequestBody Tag tag) {
         tagService.add(tag);
         return R.success("新增成功!");

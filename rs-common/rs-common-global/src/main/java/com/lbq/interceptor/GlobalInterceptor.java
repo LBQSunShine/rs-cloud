@@ -13,6 +13,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 拦截器
@@ -27,9 +29,18 @@ public class GlobalInterceptor implements HandlerInterceptor {
     @Autowired
     private RedisService redisService;
 
+    /**
+     * 白名单
+     */
+    private static List<String> WHITE_URLS = Arrays.asList("/auth/login", "/auth/logout", "/auth/register");
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String from = request.getHeader(TokenConstants.FROM);
+        String path = request.getRequestURI();
+        if (WHITE_URLS.contains(path)) {
+            return true;
+        }
         if (StringUtils.isBlank(from)) {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpStatus.NOT_FOUND.value());

@@ -36,7 +36,6 @@ public class AuthController {
 
     @GlobalTransactional
     @PostMapping("/register")
-    @Log(title = "注册")
     public R<?> register(@RequestBody RegisterVo registerVo) {
         try {
             userService.register(registerVo.getUsername(), registerVo.getPassword());
