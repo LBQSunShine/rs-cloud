@@ -39,6 +39,20 @@ public class ScheduleUtils {
         }
     }
 
+    public static void deleteScheduleJob(Scheduler scheduler, ScheduleJob scheduleJob) {
+        try {
+            Integer id = scheduleJob.getId();
+            String jobGroup = scheduleJob.getJobGroup();
+            JobKey jobKey = getJobKey(id, jobGroup);
+            TriggerKey triggerKey = getTriggerKey(id, jobGroup);
+            scheduler.pauseTrigger(triggerKey);
+            scheduler.unscheduleJob(triggerKey);
+            scheduler.deleteJob(jobKey);
+        } catch (Exception e) {
+            throw new RuntimeException("删除定时任务失败!");
+        }
+    }
+
     private static Job getClass(String classname) throws Exception {
         Class<?> clazz = Class.forName(classname);
         return (Job) clazz.newInstance();
