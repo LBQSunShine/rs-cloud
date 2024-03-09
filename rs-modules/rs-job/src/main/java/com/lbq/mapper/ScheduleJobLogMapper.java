@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 调度日志
  *
  * @author lbq
- * @since 2024-02-20
+ * @since 2024-03-09
  */
 @Mapper
 public interface ScheduleJobLogMapper extends BaseMapper<ScheduleJobLog> {

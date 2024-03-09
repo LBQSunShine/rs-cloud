@@ -8,6 +8,8 @@ import com.lbq.constants.StatusConstants;
 import com.lbq.context.BaseContext;
 import com.lbq.mapper.ScheduleJobMapper;
 import com.lbq.pojo.ScheduleJob;
+import com.lbq.pojo.ScheduleJobLog;
+import com.lbq.service.ScheduleJobLogService;
 import com.lbq.service.ScheduleJobService;
 import com.lbq.utils.CronUtils;
 import com.lbq.utils.ScheduleUtils;
@@ -36,6 +38,9 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
 
     @Autowired
     private Scheduler scheduler;
+
+    @Autowired
+    private ScheduleJobLogService scheduleJobLogService;
 
     /**
      * 项目启动时，初始化定时器 主要是防止手动修改数据库导致未同步到定时任务处理（注：不能手动修改数据库ID和任务组名，否则会导致脏数据）
@@ -92,13 +97,21 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
         if (job == null) {
             throw new RuntimeException("调度任务不存在!");
         }
+        ScheduleJobLog scheduleJobLog = new ScheduleJobLog(job);
         try {
             JobKey jobKey = ScheduleUtils.getJobKey(job.getId(), job.getJobGroup());
             if (scheduler.checkExists(jobKey)) {
                 scheduler.triggerJob(jobKey);
             }
+            scheduleJobLog.setStatus(StatusConstants.SUCCESS);
         } catch (SchedulerException e) {
-            throw new RuntimeException("调度任务不存在!");
+            String message = "调度任务不存在!";
+            scheduleJobLog.setStatus(StatusConstants.FAIL);
+            scheduleJobLog.setMessage(message);
+            throw new RuntimeException(message);
+        } finally {
+            scheduleJobLog.setEndTime(new Date());
+            scheduleJobLogService.save(scheduleJobLog);
         }
     }
 }
