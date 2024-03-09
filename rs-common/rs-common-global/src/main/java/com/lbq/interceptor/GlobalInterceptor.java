@@ -45,7 +45,7 @@ public class GlobalInterceptor implements HandlerInterceptor {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpStatus.NOT_FOUND.value());
             PrintWriter writer = response.getWriter();
-            writer.write("error");
+            writer.write("Error");
             return false;
         }
         boolean hasKey = redisService.hasKey(from);
@@ -53,7 +53,7 @@ public class GlobalInterceptor implements HandlerInterceptor {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpStatus.NOT_FOUND.value());
             PrintWriter writer = response.getWriter();
-            writer.write("error");
+            writer.write("Error");
             return false;
         }
         BaseContext.setUserId(request.getIntHeader(TokenConstants.USER_ID));
