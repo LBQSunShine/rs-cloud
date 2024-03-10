@@ -9,6 +9,7 @@
 * 分布式事务选型Seata
 * openfeign实现服务之间调用
 * 自定义注解 + Aop的方式异步记录用户操作数据
+* 使用Redis + 定时任务实现文章点赞功能
 * quartz实现定时任务调度
 * 流量控制框架选型Sentinel
 * 微服务统一日志ELK
@@ -24,10 +25,13 @@ rs-cloud
         |——rs-common-redis      缓存服务
 |——rs-gateway           网关模块[9000]
 |——rs-modules           业务模块
+        |——rs-article-root      文章模块[8084]
+                |——rs-article           文章服务
+                |——rs-article-client    文章服务api
         |——rs-file-root     文件模块
                 |——rs-file          文件服务
                 |——rs-file-client   文件服务api
-        |——rs-job           任务调度
+        |——rs-job           任务调度[8083]
         |——rs-system-root   系统模块
                 |——rs-system        系统服务[8082]
                 |——rs-system-client 系统服务api
