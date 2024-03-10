@@ -1,10 +1,10 @@
 package com.lbq.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -129,5 +129,71 @@ public class RedisService {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 缓存Map
+     *
+     * @param key
+     * @param map
+     */
+    public <T> void hSet(String key, Map<String, T> map) {
+        if (map != null) {
+            redisTemplate.opsForHash().putAll(key, map);
+        }
+    }
+
+    /**
+     * 获得缓存的Map
+     *
+     * @param key
+     * @return
+     */
+    public <T> Map<String, T> hGet(String key) {
+        return redisTemplate.opsForHash().entries(key);
+    }
+
+    /**
+     * 往Hash中存入数据
+     *
+     * @param key   Redis键
+     * @param hKey  Hash键
+     * @param value 值
+     */
+    public <T> void hSetValue(String key, String hKey, T value) {
+        redisTemplate.opsForHash().put(key, hKey, value);
+    }
+
+    /**
+     * 获取Hash中的数据
+     *
+     * @param key  Redis键
+     * @param hKey Hash键
+     * @return Hash中的对象
+     */
+    public <T> T hGetValue(String key, String hKey) {
+        HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
+        return opsForHash.get(key, hKey);
+    }
+
+    /**
+     * 删除Hash中的某条数据
+     *
+     * @param key  Redis键
+     * @param hKey Hash键
+     * @return 是否成功
+     */
+    public boolean hDeleteValue(String key, String hKey) {
+        return redisTemplate.opsForHash().delete(key, hKey) > 0;
+    }
+
+    /**
+     * 获取key值固定前缀的values
+     *
+     * @param prefix
+     * @return
+     */
+    public <T> Cursor<T> hGetValuesWithPrefix(String prefix) {
+        return redisTemplate.opsForHash().scan(prefix, ScanOptions.NONE);
     }
 }

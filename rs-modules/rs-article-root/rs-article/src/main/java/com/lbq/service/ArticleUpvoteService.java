@@ -11,4 +11,5 @@ import com.lbq.pojo.ArticleUpvote;
  */
 public interface ArticleUpvoteService extends IService<ArticleUpvote> {
 
+    void saveArticleUpvote();
 }

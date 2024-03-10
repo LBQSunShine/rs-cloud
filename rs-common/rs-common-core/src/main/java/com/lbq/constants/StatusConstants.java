@@ -12,4 +12,6 @@ public interface StatusConstants {
     String DISABLE = "disable";
     String SUCCESS = "success";
     String FAIL = "fail";
+    String STATUS_0 = "0";
+    String STATUS_1 = "1";
 }
