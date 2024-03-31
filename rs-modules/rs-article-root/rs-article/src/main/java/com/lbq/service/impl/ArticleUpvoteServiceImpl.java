@@ -28,21 +28,30 @@ public class ArticleUpvoteServiceImpl extends ServiceImpl<ArticleUpvoteMapper, A
     @Autowired
     private RedisService redisService;
 
+    @Autowired
+    private ArticleUpvoteMapper articleUpvoteMapper;
+
     @Override
     @Transactional
     public void saveArticleUpvote() {
         Cursor<Map.Entry<Object, Object>> cursor = redisService.hGetValuesWithPrefix(ArticleConstants.UPVOTE);
-        List<ArticleUpvote> articleUpvoteList = new ArrayList<>();
-        while (cursor.hasNext()) {
-            Map.Entry<Object, Object> next = cursor.next();
-            String key = next.getKey().toString();
-            String[] split = key.split("::");
-            String value = next.getValue().toString();
-            ArticleUpvote articleUpvote = new ArticleUpvote(split[0], split[1], value);
-            articleUpvoteList.add(articleUpvote);
-        }
-        if (CollectionUtils.isNotEmpty(articleUpvoteList)) {
-            super.saveOrUpdateBatch(articleUpvoteList);
+        try {
+            List<ArticleUpvote> articleUpvoteList = new ArrayList<>();
+            while (cursor.hasNext()) {
+                Map.Entry<Object, Object> next = cursor.next();
+                String key = next.getKey().toString();
+                String[] split = key.split("::");
+                String value = next.getValue().toString();
+                ArticleUpvote articleUpvote = new ArticleUpvote(split[0], split[1], value, key);
+                articleUpvoteList.add(articleUpvote);
+            }
+            if (CollectionUtils.isNotEmpty(articleUpvoteList)) {
+                articleUpvoteMapper.saveArticleUpvote(articleUpvoteList);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        } finally {
+            cursor.close();
         }
     }
 }

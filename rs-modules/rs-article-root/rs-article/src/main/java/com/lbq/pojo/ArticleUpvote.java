@@ -26,15 +26,18 @@ public class ArticleUpvote implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    private String existsKey;
+
     private Integer articleId;
 
     private String status;
 
     private String upvoteBy;
 
-    public ArticleUpvote(String upvoteBy, String articleId, String status) {
+    public ArticleUpvote(String upvoteBy, String articleId, String status, String existsKey) {
         this.upvoteBy = upvoteBy;
         this.articleId = Integer.valueOf(articleId);
         this.status = status;
+        this.existsKey = existsKey;
     }
 }

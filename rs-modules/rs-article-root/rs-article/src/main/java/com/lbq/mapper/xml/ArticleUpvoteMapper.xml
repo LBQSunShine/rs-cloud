@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lbq.mapper.ArticleUpvoteMapper">
+    <insert id="saveArticleUpvote" parameterType="list">
+        INSERT INTO rs_article_upvote (article_id, upvote_by, status, exists_key)
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.articleId}, #{item.upvoteBy}, #{item.status}, #{item.existsKey})
+        </foreach>
+        ON DUPLICATE KEY UPDATE status =
+                         VALUES (status);
+    </insert>
 </mapper>
