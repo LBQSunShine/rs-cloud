@@ -3,7 +3,10 @@ package com.lbq.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lbq.pojo.Article;
+import com.lbq.pojo.Comment;
 import com.lbq.vo.PageVo;
+
+import java.util.Collection;
 
 /**
  * 文章
@@ -22,4 +25,8 @@ public interface ArticleService extends IService<Article> {
     void upvote(Article article);
 
     void unUpvote(Article article);
+
+    void comment(Comment comment);
+
+    void deleteComment(Collection<Integer> commentIds);
 }

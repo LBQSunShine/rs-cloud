@@ -7,14 +7,17 @@ import com.lbq.constants.StatusConstants;
 import com.lbq.context.BaseContext;
 import com.lbq.mapper.ArticleMapper;
 import com.lbq.pojo.Article;
+import com.lbq.pojo.Comment;
 import com.lbq.service.ArticleService;
 import com.lbq.service.ArticleTagService;
+import com.lbq.service.CommentService;
 import com.lbq.service.RedisService;
 import com.lbq.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +33,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private ArticleTagService articleTagService;
+
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private RedisService redisService;
@@ -93,5 +99,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             map.put(hKey, StatusConstants.STATUS_0);
             redisService.hSet(key, map);
         }
+    }
+
+    @Override
+    public void comment(Comment comment) {
+        comment.setCreateBy(BaseContext.getUsername());
+        comment.setCreateTime(new Date());
+        commentService.save(comment);
+    }
+
+    @Override
+    public void deleteComment(Collection<Integer> commentIds) {
+        commentService.removeByIds(commentIds);
     }
 }

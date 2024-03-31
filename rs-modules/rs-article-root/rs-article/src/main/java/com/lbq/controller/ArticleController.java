@@ -3,6 +3,7 @@ package com.lbq.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lbq.pojo.Article;
+import com.lbq.pojo.Comment;
 import com.lbq.service.ArticleService;
 import com.lbq.utils.IdsReq;
 import com.lbq.vo.PageVo;
@@ -57,6 +58,18 @@ public class ArticleController {
     public R<?> unUpvote(@RequestBody Article article) {
         articleService.unUpvote(article);
         return R.success("取消点赞成功!");
+    }
+
+    @PostMapping("/comment")
+    public R<?> comment(@RequestBody Comment comment) {
+        articleService.comment(comment);
+        return R.success("发布成功!");
+    }
+
+    @PostMapping("/deleteComment")
+    public R<?> deleteComment(@RequestBody IdsReq idsReq) {
+        articleService.deleteComment(idsReq.getIds());
+        return R.success("删除成功!");
     }
 }
 
