@@ -17,6 +17,14 @@ public class LoginUser {
 
     private String username;
 
+    private String avatar;
+
+    private String sex;
+
+    private String email;
+
+    private String phone;
+
     private String token;
 
     private String refreshToken;

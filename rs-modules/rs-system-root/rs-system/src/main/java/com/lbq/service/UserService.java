@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lbq.pojo.User;
 import com.lbq.vo.PageVo;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface UserService extends IService<User> {
     void enable(User user);
 
     void disable(User user);
+
+    String upload(MultipartFile file);
 }

@@ -60,6 +60,12 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Override
     @Transactional
     public void add(Tag tag) {
+        if (StringUtils.isBlank(tag.getCode())) {
+            throw new RuntimeException("请输入编码!");
+        }
+        if (StringUtils.isBlank(tag.getName())) {
+            throw new RuntimeException("请输入名称!");
+        }
         tag.setCreateBy(BaseContext.getUsername());
         tag.setCreateTime(new Date());
         tag.setStatus(StatusConstants.ENABLE);
@@ -72,6 +78,12 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Override
     @Transactional
     public void edit(Tag tag) {
+        if (StringUtils.isBlank(tag.getCode())) {
+            throw new RuntimeException("请输入编码!");
+        }
+        if (StringUtils.isBlank(tag.getName())) {
+            throw new RuntimeException("请输入名称!");
+        }
         LambdaUpdateWrapper<Tag> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper
                 .eq(Tag::getId, tag.getId())

@@ -63,12 +63,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         claims.put(TokenConstants.USER_USER_NAME, username);
         claims.put(TokenConstants.USER_NICK_NAME, nickname);
         String token = JwtUtils.sign(claims);
-        Long timeout = 30 * 60L;
+        Long timeout = 8 * 60 * 60L;
         redisService.set(uuid, token, timeout);
         LoginUser loginUser = new LoginUser();
         loginUser.setId(id);
         loginUser.setUsername(username);
         loginUser.setNickname(nickname);
+        loginUser.setAvatar(user.getAvatar());
+        loginUser.setSex(user.getSex());
+        loginUser.setEmail(user.getEmail());
+        loginUser.setPhone(user.getPhone());
         loginUser.setToken(token);
         return loginUser;
     }

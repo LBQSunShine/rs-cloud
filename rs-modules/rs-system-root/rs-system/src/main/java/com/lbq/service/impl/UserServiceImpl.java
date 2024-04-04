@@ -8,17 +8,20 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.constants.StatusConstants;
 import com.lbq.mapper.UserMapper;
+import com.lbq.openfeign.FileServiceOpenfeign;
 import com.lbq.pojo.Role;
 import com.lbq.pojo.User;
 import com.lbq.pojo.UserRole;
 import com.lbq.service.RoleService;
 import com.lbq.service.UserRoleService;
 import com.lbq.service.UserService;
+import com.lbq.vo.FileVo;
 import com.lbq.vo.PageVo;
 import com.lbq.vo.SortField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -38,6 +41,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private RoleService roleService;
     @Autowired
     private UserRoleService userRoleService;
+    @Autowired
+    private FileServiceOpenfeign fileServiceOpenfeign;
 
     @Override
     public Page<User> page(PageVo pageVo, String keyword) {
@@ -130,11 +135,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LambdaUpdateWrapper<User> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper
                 .eq(User::getId, user.getId())
-                .eq(User::getStatus, StatusConstants.DISABLE)
-                .set(User::getStatus, StatusConstants.ENABLE);
+                .eq(User::getStatus, StatusConstants.ENABLE)
+                .set(User::getStatus, StatusConstants.DISABLE);
         boolean update = super.update(updateWrapper);
         if (!update) {
             throw new RuntimeException("状态变更，请刷新重试!");
         }
+    }
+
+    @Override
+    public String upload(MultipartFile file) {
+        FileVo upload = fileServiceOpenfeign.upload(file);
+        return upload.getUrl();
     }
 }

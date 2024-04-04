@@ -25,7 +25,7 @@ public class FileOpenfeign {
     @Autowired
     private FileService fileService;
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload")
     public FileVo upload(MultipartFile file) {
         try {
             String url = fileService.upload(file);

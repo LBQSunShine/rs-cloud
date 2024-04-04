@@ -10,6 +10,7 @@ import com.lbq.vo.PageVo;
 import com.lbq.vo.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,6 +38,12 @@ public class UserController {
     public R<?> edit(@RequestBody User user) {
         userService.edit(user);
         return R.success("修改成功!");
+    }
+
+    @PostMapping("/upload")
+    public R<?> upload(MultipartFile file) {
+        String upload = userService.upload(file);
+        return R.success("上传成功!", upload);
     }
 
 
