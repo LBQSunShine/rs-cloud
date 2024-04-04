@@ -6,6 +6,7 @@ import com.lbq.pojo.Article;
 import com.lbq.pojo.Comment;
 import com.lbq.service.ArticleService;
 import com.lbq.utils.IdsReq;
+import com.lbq.vo.ArticleVo;
 import com.lbq.vo.PageVo;
 import com.lbq.vo.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,19 +27,25 @@ public class ArticleController {
 
     @GetMapping("/page")
     public R<?> page(PageVo pageVo, @RequestParam(name = "keyword", required = false) String keyword) {
-        Page<Article> res = articleService.page(pageVo, keyword);
+        Page<ArticleVo> res = articleService.page(pageVo, keyword);
+        return R.success(res);
+    }
+
+    @GetMapping("/getById")
+    public R<?> getById(@RequestParam(name = "id") Integer id) {
+        ArticleVo res = articleService.getById(id);
         return R.success(res);
     }
 
     @PostMapping("/add")
-    public R<?> add(@RequestBody Article article) {
-        articleService.add(article);
+    public R<?> add(@RequestBody ArticleVo articleVo) {
+        articleService.add(articleVo);
         return R.success("发布成功!");
     }
 
     @PostMapping("/edit")
-    public R<?> edit(@RequestBody Article article) {
-        articleService.edit(article);
+    public R<?> edit(@RequestBody ArticleVo articleVo) {
+        articleService.edit(articleVo);
         return R.success("修改成功!");
     }
 

@@ -1,12 +1,16 @@
 package com.lbq.openfeign;
 
 import com.lbq.config.OpenfeignConfig;
+import com.lbq.utils.IdsReq;
 import com.lbq.vo.OperLogVo;
+import com.lbq.vo.TagVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 /**
  * openfeign
@@ -24,4 +28,7 @@ public interface SystemOpenfeign {
 
     @PostMapping("/sys/openfeign/log/addOperLog")
     void addOperLog(@RequestBody OperLogVo operLogVo);
+
+    @PostMapping("/sys/openfeign/tag/getMapByIds")
+    Map<Integer, TagVo> getMapByIds(@RequestBody IdsReq idsReq);
 }

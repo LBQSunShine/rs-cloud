@@ -40,4 +40,11 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
         queryWrapper.eq(ArticleTag::getArticleId, articleId);
         super.remove(queryWrapper);
     }
+
+    @Override
+    public List<ArticleTag> listByArticleId(Integer articleId) {
+        LambdaQueryWrapper<ArticleTag> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ArticleTag::getArticleId, articleId);
+        return super.list(queryWrapper);
+    }
 }

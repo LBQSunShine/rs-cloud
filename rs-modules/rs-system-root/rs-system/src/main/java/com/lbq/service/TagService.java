@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lbq.pojo.Tag;
 import com.lbq.vo.PageVo;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.lbq.vo.TagVo;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * 标签
@@ -25,4 +28,6 @@ public interface TagService extends IService<Tag> {
     void enable(Tag tag);
 
     void disable(Tag tag);
+
+    Map<Integer, TagVo> getMapByIds(Collection<Integer> ids);
 }

@@ -1,5 +1,6 @@
 package com.lbq.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.constants.ArticleConstants;
@@ -53,5 +54,12 @@ public class ArticleUpvoteServiceImpl extends ServiceImpl<ArticleUpvoteMapper, A
         } finally {
             cursor.close();
         }
+    }
+
+    @Override
+    public List<ArticleUpvote> listByArticleId(Integer articleId) {
+        LambdaQueryWrapper<ArticleUpvote> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ArticleUpvote::getArticleId, articleId);
+        return super.list(queryWrapper);
     }
 }

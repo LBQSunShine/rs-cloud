@@ -4,6 +4,7 @@ import com.alibaba.cloud.commons.lang.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.constants.StatusConstants;
@@ -13,11 +14,12 @@ import com.lbq.pojo.Tag;
 import com.lbq.service.TagService;
 import com.lbq.vo.PageVo;
 import com.lbq.vo.SortField;
+import com.lbq.vo.TagVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * 标签
@@ -126,5 +128,25 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         if (!update) {
             throw new RuntimeException("状态变更，请刷新重试!");
         }
+    }
+
+    @Override
+    public Map<Integer, TagVo> getMapByIds(Collection<Integer> ids) {
+        LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
+        if (CollectionUtils.isNotEmpty(ids)) {
+            queryWrapper.in(Tag::getId, ids);
+        }
+        queryWrapper.eq(Tag::getStatus, StatusConstants.ENABLE);
+        List<Tag> list = super.list(queryWrapper);
+        Map<Integer, TagVo> map = new HashMap<>();
+        for (Tag tag : list) {
+            Integer id = tag.getId();
+            TagVo tagVo = new TagVo();
+            tagVo.setId(id);
+            tagVo.setCode(tag.getCode());
+            tagVo.setName(tag.getName());
+            map.put(id, tagVo);
+        }
+        return map;
     }
 }

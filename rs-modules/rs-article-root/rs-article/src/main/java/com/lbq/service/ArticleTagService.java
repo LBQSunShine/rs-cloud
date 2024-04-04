@@ -16,4 +16,6 @@ public interface ArticleTagService extends IService<ArticleTag> {
     void saveByArticle(Integer articleId, List<Integer> tagIds);
 
     void removeByArticleId(Integer articleId);
+
+    List<ArticleTag> listByArticleId(Integer articleId);
 }

@@ -3,6 +3,8 @@ package com.lbq.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lbq.pojo.ArticleUpvote;
 
+import java.util.List;
+
 /**
  * 文章点赞
  *
@@ -12,4 +14,6 @@ import com.lbq.pojo.ArticleUpvote;
 public interface ArticleUpvoteService extends IService<ArticleUpvote> {
 
     void saveArticleUpvote();
+
+    List<ArticleUpvote> listByArticleId(Integer articleId);
 }

@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lbq.pojo.Article;
 import com.lbq.pojo.Comment;
+import com.lbq.vo.ArticleVo;
 import com.lbq.vo.PageVo;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 文章
@@ -16,11 +18,13 @@ import java.util.Collection;
  */
 public interface ArticleService extends IService<Article> {
 
-    Page<Article> page(PageVo pageVo, String keyword);
+    Page<ArticleVo> page(PageVo pageVo, String keyword);
 
-    void add(Article article);
+    ArticleVo getById(Integer id);
 
-    void edit(Article article);
+    void add(ArticleVo articleVo);
+
+    void edit(ArticleVo articleVo);
 
     void upvote(Article article);
 
@@ -29,4 +33,6 @@ public interface ArticleService extends IService<Article> {
     void comment(Comment comment);
 
     void deleteComment(Collection<Integer> commentIds);
+
+    List<ArticleVo> setView(List<Article> articles, boolean isDetail);
 }
