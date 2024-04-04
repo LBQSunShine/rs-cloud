@@ -16,3 +16,4 @@ spring:
           - data-id: ${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
       username: nacos
       password: nacos
+filePath: D:\Tools\upload\dev\

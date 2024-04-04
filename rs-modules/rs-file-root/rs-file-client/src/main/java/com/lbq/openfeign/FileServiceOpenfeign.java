@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * openfeign
  *
@@ -18,4 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface FileServiceOpenfeign {
     @PostMapping("/file/openfeign/upload")
     FileVo upload(MultipartFile file);
+
+    @PostMapping("/file/openfeign/copyToProd")
+    void copyToProd(List<FileVo> fileVos);
 }

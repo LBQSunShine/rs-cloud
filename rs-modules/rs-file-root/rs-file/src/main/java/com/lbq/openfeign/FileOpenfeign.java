@@ -4,9 +4,12 @@ import com.lbq.service.FileService;
 import com.lbq.vo.FileVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * 文件
@@ -31,6 +34,15 @@ public class FileOpenfeign {
             return fileVo;
         } catch (Exception e) {
             return new FileVo();
+        }
+    }
+
+    @PostMapping("/copyToProd")
+    public void copyToProd(@RequestBody List<FileVo> fileVos) {
+        try {
+            fileService.copyToProd(fileVos);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -1,8 +1,10 @@
 package com.lbq.service;
 
+import com.lbq.vo.FileVo;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 文件
@@ -13,4 +15,6 @@ import java.io.IOException;
  */
 public interface FileService {
     String upload(MultipartFile file) throws IOException;
+
+    void copyToProd(List<FileVo> fileVos);
 }
