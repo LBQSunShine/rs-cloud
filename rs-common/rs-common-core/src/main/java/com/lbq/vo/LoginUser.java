@@ -27,5 +27,9 @@ public class LoginUser {
 
     private String token;
 
+    private String signature;
+
+    private String background;
+
     private String refreshToken;
 }

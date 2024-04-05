@@ -73,6 +73,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         loginUser.setSex(user.getSex());
         loginUser.setEmail(user.getEmail());
         loginUser.setPhone(user.getPhone());
+        loginUser.setSignature(user.getSignature());
+        loginUser.setBackground(user.getBackground());
         loginUser.setToken(token);
         return loginUser;
     }

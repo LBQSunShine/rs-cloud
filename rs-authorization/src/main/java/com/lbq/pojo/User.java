@@ -40,4 +40,8 @@ public class User implements Serializable {
     private String phone;
 
     private String status;
+
+    private String signature;
+
+    private String background;
 }
