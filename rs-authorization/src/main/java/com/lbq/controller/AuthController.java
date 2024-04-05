@@ -58,8 +58,9 @@ public class AuthController {
 //    }
 
     @PostMapping("/editPassword")
-    public R<?> editPassword(@RequestBody PasswordVo passwordVo) {
-        userService.editPassword(passwordVo.getUsername(), passwordVo.getPassword(), passwordVo.getNewPassword());
+    public R<?> editPassword(@RequestBody PasswordVo passwordVo, HttpServletRequest request) {
+        String token = SecurityUtils.getToken(request);
+        userService.editPassword(passwordVo.getUsername(), passwordVo.getPassword(), passwordVo.getNewPassword(), token);
         return R.success("修改成功!");
     }
 }

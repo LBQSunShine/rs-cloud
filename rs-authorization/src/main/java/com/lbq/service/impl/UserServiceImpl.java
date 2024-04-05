@@ -109,7 +109,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     @Transactional
-    public void editPassword(String username, String password, String newPassword) {
+    public void editPassword(String username, String password, String newPassword, String token) {
         if (StringUtils.isBlank(password)) {
             throw new RuntimeException("请输入当前密码!");
         }
@@ -135,6 +135,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     .eq(User::getUsername, username)
                     .set(User::getPassword, encrypt);
             super.update(updateWrapper);
+            this.logout(token);
             return true;
         });
     }

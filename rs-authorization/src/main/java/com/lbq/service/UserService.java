@@ -45,5 +45,5 @@ public interface UserService extends IService<User> {
      * @param password
      * @param newPassword
      */
-    void editPassword(String username, String password, String newPassword);
+    void editPassword(String username, String password, String newPassword, String token);
 }
