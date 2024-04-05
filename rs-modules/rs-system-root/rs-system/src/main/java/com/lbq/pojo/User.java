@@ -41,6 +41,10 @@ public class User implements Serializable {
 
     private String status;
 
+    private String signature;
+    
+    private String background;
+
     @TableField(exist = false)
     private String roles;
 }

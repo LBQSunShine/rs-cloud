@@ -39,10 +39,10 @@ public class TagController {
     }
 
     @GetMapping("/list")
-    public R<?> list(@RequestParam(name = "isAll") boolean isAll) {
+    public R<?> list(@RequestParam(name = "isAll", required = false) Boolean isAll) {
         LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Tag::getStatus, StatusConstants.ENABLE);
-        if (!isAll) {
+        if (isAll != null && !isAll) {
             queryWrapper.last("limit 9");
         }
         List<Tag> list = tagService.list(queryWrapper);

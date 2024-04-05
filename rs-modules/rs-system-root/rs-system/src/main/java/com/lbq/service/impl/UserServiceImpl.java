@@ -108,7 +108,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set(User::getEmail, user.getEmail())
                 .set(User::getPhone, user.getPhone())
                 .set(User::getAvatar, user.getAvatar())
-                .set(User::getSex, user.getSex());
+                .set(User::getSex, user.getSex())
+                .set(User::getBackground, user.getBackground())
+                .set(User::getSignature, user.getSignature());
         boolean update = super.update(updateWrapper);
         if (!update) {
             throw new RuntimeException("修改失败!");
