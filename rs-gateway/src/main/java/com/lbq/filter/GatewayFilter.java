@@ -49,7 +49,7 @@ public class GatewayFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpRequest.Builder mutate = request.mutate();
         String path = request.getURI().getPath();
-        if (WHITE_URLS.contains(path)) {
+        if (WHITE_URLS.contains(path) || path.contains("/file/preview")) {
             return chain.filter(exchange);
         }
         String token = this.getToken(request);

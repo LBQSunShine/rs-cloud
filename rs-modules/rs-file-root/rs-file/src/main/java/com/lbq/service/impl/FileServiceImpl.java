@@ -46,7 +46,8 @@ public class FileServiceImpl implements FileService {
             dest.getParentFile().mkdirs();
         }
         file.transferTo(dest);
-        return url;
+        String fileUrl = "/file/preview/" + format + "/" + fileName;
+        return fileUrl.replace("\\", "/");
     }
 
     @Override
