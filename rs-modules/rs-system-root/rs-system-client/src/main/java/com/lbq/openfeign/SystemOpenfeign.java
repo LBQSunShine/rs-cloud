@@ -6,10 +6,12 @@ import com.lbq.vo.OperLogVo;
 import com.lbq.vo.TagVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,4 +33,7 @@ public interface SystemOpenfeign {
 
     @PostMapping("/sys/openfeign/tag/getMapByIds")
     Map<Integer, TagVo> getMapByIds(@RequestBody IdsReq idsReq);
+
+    @GetMapping("/sys/openfeign/file/getUserFiles")
+    List<String> getUserFiles();
 }

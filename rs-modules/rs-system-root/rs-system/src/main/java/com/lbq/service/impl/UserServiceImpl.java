@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,9 +51,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(keyword)) {
             queryWrapper.lambda().and(wrapper -> {
-                wrapper.like(User::getUsername, keyword)
-                        .or()
-                        .like(User::getNickname, keyword);
+                wrapper.like(User::getUsername, keyword).or().like(User::getNickname, keyword);
             });
         }
         String sortField = pageVo.getSortField();
@@ -102,15 +101,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional
     public void edit(User user) {
         LambdaUpdateWrapper<User> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper
-                .eq(User::getId, user.getId())
-                .set(User::getNickname, user.getNickname())
-                .set(User::getEmail, user.getEmail())
-                .set(User::getPhone, user.getPhone())
-                .set(User::getAvatar, user.getAvatar())
-                .set(User::getSex, user.getSex())
-                .set(User::getBackground, user.getBackground())
-                .set(User::getSignature, user.getSignature());
+        updateWrapper.eq(User::getId, user.getId()).set(User::getNickname, user.getNickname()).set(User::getEmail, user.getEmail()).set(User::getPhone, user.getPhone()).set(User::getAvatar, user.getAvatar()).set(User::getSex, user.getSex()).set(User::getBackground, user.getBackground()).set(User::getSignature, user.getSignature());
         boolean update = super.update(updateWrapper);
         if (!update) {
             throw new RuntimeException("修改失败!");
@@ -121,10 +112,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional
     public void enable(User user) {
         LambdaUpdateWrapper<User> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper
-                .eq(User::getId, user.getId())
-                .eq(User::getStatus, StatusConstants.DISABLE)
-                .set(User::getStatus, StatusConstants.ENABLE);
+        updateWrapper.eq(User::getId, user.getId()).eq(User::getStatus, StatusConstants.DISABLE).set(User::getStatus, StatusConstants.ENABLE);
         boolean update = super.update(updateWrapper);
         if (!update) {
             throw new RuntimeException("状态变更，请刷新重试!");
@@ -135,10 +123,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional
     public void disable(User user) {
         LambdaUpdateWrapper<User> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper
-                .eq(User::getId, user.getId())
-                .eq(User::getStatus, StatusConstants.ENABLE)
-                .set(User::getStatus, StatusConstants.DISABLE);
+        updateWrapper.eq(User::getId, user.getId()).eq(User::getStatus, StatusConstants.ENABLE).set(User::getStatus, StatusConstants.DISABLE);
         boolean update = super.update(updateWrapper);
         if (!update) {
             throw new RuntimeException("状态变更，请刷新重试!");
@@ -149,5 +134,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public String upload(MultipartFile file) {
         FileVo upload = fileServiceOpenfeign.upload(file);
         return upload.getUrl();
+    }
+
+    @Override
+    public List<String> getUserFiles() {
+        List<User> users = super.list();
+        List<String> avatars = users.stream().map(User::getAvatar).collect(Collectors.toList());
+        List<String> backgrounds = users.stream().map(User::getBackground).collect(Collectors.toList());
+        List<String> allFiles = new ArrayList<>();
+        allFiles.addAll(avatars);
+        allFiles.addAll(backgrounds);
+        return allFiles;
     }
 }

@@ -45,4 +45,13 @@ public class FileOpenfeign {
             e.printStackTrace();
         }
     }
+
+    @PostMapping("/deleteFile")
+    public void deleteFile() {
+        try {
+            fileService.deleteFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -32,4 +32,6 @@ public interface UserService extends IService<User> {
     void disable(User user);
 
     String upload(MultipartFile file);
+
+    List<String> getUserFiles();
 }

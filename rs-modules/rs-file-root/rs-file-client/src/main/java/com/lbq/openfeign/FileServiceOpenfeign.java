@@ -25,4 +25,7 @@ public interface FileServiceOpenfeign {
 
     @PostMapping("/file/openfeign/copyToProd")
     void copyToProd(List<FileVo> fileVos);
+
+    @PostMapping("/file/openfeign/deleteFile")
+    void deleteFile();
 }
