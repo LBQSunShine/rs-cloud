@@ -1,7 +1,9 @@
 package com.lbq.service.impl;
 
 import com.alibaba.cloud.commons.lang.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.constants.StatusConstants;
@@ -9,6 +11,7 @@ import com.lbq.context.BaseContext;
 import com.lbq.mapper.ScheduleJobMapper;
 import com.lbq.pojo.ScheduleJob;
 import com.lbq.pojo.ScheduleJobLog;
+import com.lbq.service.RedissonService;
 import com.lbq.service.ScheduleJobLogService;
 import com.lbq.service.ScheduleJobService;
 import com.lbq.utils.CronUtils;
@@ -41,6 +44,9 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
 
     @Autowired
     private ScheduleJobLogService scheduleJobLogService;
+
+    @Autowired
+    private RedissonService redissonService;
 
     /**
      * 项目启动时，初始化定时器 主要是防止手动修改数据库导致未同步到定时任务处理（注：不能手动修改数据库ID和任务组名，否则会导致脏数据）
@@ -112,6 +118,78 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
         } finally {
             scheduleJobLog.setEndTime(new Date());
             scheduleJobLogService.save(scheduleJobLog);
+        }
+    }
+
+    @Override
+    public void edit(ScheduleJob scheduleJob) {
+        if (!CronUtils.isValid(scheduleJob.getCronExpression())) {
+            throw new RuntimeException("Cron表达式不正确!");
+        }
+        Integer id = scheduleJob.getId();
+        Boolean res = redissonService.tryLockExecute(String.valueOf(id), () -> {
+            LambdaQueryWrapper<ScheduleJob> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper
+                    .eq(ScheduleJob::getId, scheduleJob.getId())
+                    .eq(ScheduleJob::getStatus, StatusConstants.DISABLE);
+            boolean remove = super.remove(queryWrapper);
+            if (!remove) {
+                throw new RuntimeException("状态变更，请刷新重试!");
+            }
+            scheduleJob.setCreateBy(BaseContext.getUsername());
+            scheduleJob.setCreateTime(new Date());
+            super.save(scheduleJob);
+            ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
+            return true;
+        });
+        if (res == null) {
+            throw new RuntimeException("状态变更，请刷新重试!");
+        }
+    }
+
+    @Override
+    public void enable(ScheduleJob scheduleJob) {
+        Integer id = scheduleJob.getId();
+        Boolean res = redissonService.tryLockExecute(String.valueOf(id), () -> {
+            LambdaUpdateWrapper<ScheduleJob> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper
+                    .eq(ScheduleJob::getId, scheduleJob.getId())
+                    .eq(ScheduleJob::getStatus, StatusConstants.DISABLE)
+                    .set(ScheduleJob::getStatus, StatusConstants.ENABLE)
+                    .set(ScheduleJob::getUpdateBy, BaseContext.getUsername())
+                    .set(ScheduleJob::getUpdateTime, new Date());
+            boolean update = super.update(updateWrapper);
+            if (!update) {
+                throw new RuntimeException("状态变更，请刷新重试!");
+            }
+            ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
+            return true;
+        });
+        if (res == null) {
+            throw new RuntimeException("状态变更，请刷新重试!");
+        }
+    }
+
+    @Override
+    public void disable(ScheduleJob scheduleJob) {
+        Integer id = scheduleJob.getId();
+        Boolean res = redissonService.tryLockExecute(String.valueOf(id), () -> {
+            LambdaUpdateWrapper<ScheduleJob> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper
+                    .eq(ScheduleJob::getId, scheduleJob.getId())
+                    .eq(ScheduleJob::getStatus, StatusConstants.ENABLE)
+                    .set(ScheduleJob::getStatus, StatusConstants.DISABLE)
+                    .set(ScheduleJob::getUpdateBy, BaseContext.getUsername())
+                    .set(ScheduleJob::getUpdateTime, new Date());
+            boolean update = super.update(updateWrapper);
+            if (!update) {
+                throw new RuntimeException("状态变更，请刷新重试!");
+            }
+            ScheduleUtils.deleteScheduleJob(scheduler, scheduleJob);
+            return true;
+        });
+        if (res == null) {
+            throw new RuntimeException("状态变更，请刷新重试!");
         }
     }
 }

@@ -44,7 +44,7 @@ public class RedissonService {
                 return fun.callback();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         } finally {
             if (lock != null && lock.isHeldByCurrentThread()) {
                 lock.unlock();
