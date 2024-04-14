@@ -6,6 +6,7 @@ import com.lbq.pojo.Article;
 import com.lbq.pojo.Comment;
 import com.lbq.vo.ArticleVo;
 import com.lbq.vo.PageVo;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,4 +36,6 @@ public interface ArticleService extends IService<Article> {
     void deleteComment(Collection<Integer> commentIds);
 
     List<ArticleVo> setView(List<Article> articles, boolean isDetail);
+
+    String upload(MultipartFile file);
 }

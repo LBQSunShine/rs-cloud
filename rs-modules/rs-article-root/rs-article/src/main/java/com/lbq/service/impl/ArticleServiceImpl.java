@@ -8,21 +8,17 @@ import com.lbq.constants.ArticleConstants;
 import com.lbq.constants.StatusConstants;
 import com.lbq.context.BaseContext;
 import com.lbq.mapper.ArticleMapper;
+import com.lbq.openfeign.FileServiceOpenfeign;
 import com.lbq.openfeign.SystemOpenfeign;
-import com.lbq.pojo.Article;
-import com.lbq.pojo.ArticleTag;
-import com.lbq.pojo.ArticleUpvote;
-import com.lbq.pojo.Comment;
+import com.lbq.pojo.*;
 import com.lbq.service.*;
 import com.lbq.utils.IdsReq;
 import com.lbq.utils.TreeUtils;
-import com.lbq.vo.ArticleVo;
-import com.lbq.vo.CommentVo;
-import com.lbq.vo.PageVo;
-import com.lbq.vo.TagVo;
+import com.lbq.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,6 +46,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private ArticleUpvoteService articleUpvoteService;
+
+    @Autowired
+    private ArticleFileService articleFileService;
+
+    @Autowired
+    private FileServiceOpenfeign fileServiceOpenfeign;
 
     @Override
     public Page<ArticleVo> page(PageVo pageVo, String keyword) {
@@ -86,6 +88,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<TagVo> tagVos = articleVo.getTagVos();
         List<Integer> tagIds = tagVos.stream().map(TagVo::getId).collect(Collectors.toList());
         articleTagService.saveByArticle(article.getId(), tagIds);
+        articleFileService.saveBatch(articleVo.getArticleFiles());
     }
 
     @Override
@@ -99,6 +102,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             throw new RuntimeException("文章不存在!");
         }
         ori.setTitle(article.getTitle());
+        ori.setType(article.getType());
         ori.setContent(article.getContent());
         // 先删除原来的标签，再新增新的标签
         articleTagService.removeByArticleId(article.getId());
@@ -148,6 +152,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    public String upload(MultipartFile file) {
+        FileVo upload = fileServiceOpenfeign.upload(file);
+        return upload.getUrl();
+    }
+
+    @Override
     public List<ArticleVo> setView(List<Article> articles, boolean isDetail) {
         if (CollectionUtils.isEmpty(articles)) {
             return Collections.EMPTY_LIST;
@@ -171,6 +181,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 List<CommentVo> commentVos = TreeUtils.convertToTree(comments);
                 articleVo.setCommentVos(commentVos);
             }
+            List<ArticleFile> articleFiles = articleFileService.listByArticleId(id);
+            articleVo.setArticleFiles(articleFiles);
             articleVos.add(articleVo);
         }
         return articleVos;

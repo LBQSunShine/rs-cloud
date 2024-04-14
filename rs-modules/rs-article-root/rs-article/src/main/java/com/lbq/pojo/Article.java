@@ -35,6 +35,8 @@ public class Article implements Serializable {
 
     private String content;
 
+    private String type;
+
     private String createBy;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")

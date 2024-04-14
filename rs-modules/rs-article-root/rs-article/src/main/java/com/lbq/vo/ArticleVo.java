@@ -1,6 +1,7 @@
 package com.lbq.vo;
 
 import com.lbq.pojo.Article;
+import com.lbq.pojo.ArticleFile;
 import com.lbq.pojo.ArticleUpvote;
 import lombok.Data;
 
@@ -22,4 +23,6 @@ public class ArticleVo {
     private List<ArticleUpvote> articleUpvotes;
 
     private List<CommentVo> commentVos;
+
+    private List<ArticleFile> articleFiles;
 }

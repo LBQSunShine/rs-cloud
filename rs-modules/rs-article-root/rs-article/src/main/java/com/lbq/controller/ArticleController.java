@@ -11,6 +11,7 @@ import com.lbq.vo.PageVo;
 import com.lbq.vo.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文章
@@ -77,6 +78,12 @@ public class ArticleController {
     public R<?> deleteComment(@RequestBody IdsReq idsReq) {
         articleService.deleteComment(idsReq.getIds());
         return R.success("删除成功!");
+    }
+
+    @PostMapping("/upload")
+    public R<?> upload(MultipartFile file) {
+        String upload = articleService.upload(file);
+        return R.success("上传成功!", upload);
     }
 }
 
