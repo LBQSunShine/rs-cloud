@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.mapper.FileMapper;
+import com.lbq.openfeign.ArticleOpenfeign;
 import com.lbq.openfeign.SystemOpenfeign;
 import com.lbq.pojo.RsFile;
 import com.lbq.service.FileService;
@@ -20,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -38,6 +40,9 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, RsFile> implements 
 
     @Autowired
     private SystemOpenfeign systemOpenfeign;
+
+    @Autowired
+    private ArticleOpenfeign articleOpenfeign;
 
     @Override
     public String upload(MultipartFile file) throws IOException {
@@ -98,10 +103,14 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, RsFile> implements 
         }
         List<String> allFiles = rsFiles.stream().map(RsFile::getUrl).collect(Collectors.toList());
         // 获取其他微服务中使用到的文件
-        List<String> inUseFiles = systemOpenfeign.getUserFiles();
+        List<String> allInUserFiles = new ArrayList<>();
+        List<String> systemInUserFiles = systemOpenfeign.getUserFiles();
+        List<String> articleFiles = articleOpenfeign.getArticleFiles();
+        allInUserFiles.addAll(systemInUserFiles);
+        allInUserFiles.addAll(articleFiles);
         // 找出差集：allFiles中存在但inUseFiles中不存在的元素
         List<String> difference = allFiles.stream()
-                .filter(item -> !inUseFiles.contains(item))
+                .filter(item -> !allInUserFiles.contains(item))
                 .collect(Collectors.toList());
         // 遍历文件夹中的所有文件，检查它们是否存在于列表中
         for (String deleteFile : difference) {

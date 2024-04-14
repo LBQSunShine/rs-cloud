@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024-03-10
  */
 @RestController
-@RequestMapping("/article/openfeign")
+@RequestMapping("/article/openfeign/upvote")
 public class ArticleUpvoteOpenfeign {
 
     @Autowired

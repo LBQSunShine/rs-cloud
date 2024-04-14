@@ -8,6 +8,7 @@ import com.lbq.service.ArticleFileService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 文章文件
@@ -25,5 +26,11 @@ public class ArticleFileServiceImpl extends ServiceImpl<ArticleFileMapper, Artic
                 .eq(ArticleFile::getArticleId, articleId)
                 .orderByDesc(ArticleFile::getSeq);
         return super.list(queryWrapper);
+    }
+
+    @Override
+    public List<String> getArticleFiles() {
+        List<ArticleFile> articleFiles = super.list();
+        return articleFiles.stream().map(ArticleFile::getUrl).collect(Collectors.toList());
     }
 }

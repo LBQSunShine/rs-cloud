@@ -14,4 +14,6 @@ import java.util.List;
 public interface ArticleFileService extends IService<ArticleFile> {
 
     List<ArticleFile> listByArticleId(Integer articleId);
+
+    List<String> getArticleFiles();
 }

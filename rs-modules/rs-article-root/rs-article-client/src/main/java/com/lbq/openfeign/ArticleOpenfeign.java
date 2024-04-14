@@ -3,7 +3,10 @@ package com.lbq.openfeign;
 import com.lbq.config.OpenfeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 /**
  * @Author lbq
@@ -14,6 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient(value = "article", configuration = OpenfeignConfig.class)
 public interface ArticleOpenfeign {
 
-    @PostMapping("/article/openfeign/saveArticleUpvote")
+    @PostMapping("/article/openfeign/upvote/saveArticleUpvote")
     void saveArticleUpvote();
+
+    @GetMapping("/article/openfeign/file/getArticleFiles")
+    List<String> getArticleFiles();
 }
