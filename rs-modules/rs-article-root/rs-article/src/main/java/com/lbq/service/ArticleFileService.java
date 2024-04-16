@@ -16,4 +16,6 @@ public interface ArticleFileService extends IService<ArticleFile> {
     List<ArticleFile> listByArticleId(Integer articleId);
 
     List<String> getArticleFiles();
+
+    void saveByArticle(Integer articleId, List<ArticleFile> articleFiles);
 }

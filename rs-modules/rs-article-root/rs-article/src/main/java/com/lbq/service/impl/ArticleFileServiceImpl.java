@@ -33,4 +33,12 @@ public class ArticleFileServiceImpl extends ServiceImpl<ArticleFileMapper, Artic
         List<ArticleFile> articleFiles = super.list();
         return articleFiles.stream().map(ArticleFile::getUrl).collect(Collectors.toList());
     }
+
+    @Override
+    public void saveByArticle(Integer articleId, List<ArticleFile> articleFiles) {
+        for (ArticleFile articleFile: articleFiles) {
+            articleFile.setArticleId(articleId);
+        }
+        super.saveBatch(articleFiles);
+    }
 }

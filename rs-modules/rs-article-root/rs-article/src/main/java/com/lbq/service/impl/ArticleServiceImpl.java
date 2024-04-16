@@ -88,7 +88,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<TagVo> tagVos = articleVo.getTagVos();
         List<Integer> tagIds = tagVos.stream().map(TagVo::getId).collect(Collectors.toList());
         articleTagService.saveByArticle(article.getId(), tagIds);
-        articleFileService.saveBatch(articleVo.getArticleFiles());
+        articleFileService.saveByArticle(article.getId(), articleVo.getArticleFiles());
     }
 
     @Override
