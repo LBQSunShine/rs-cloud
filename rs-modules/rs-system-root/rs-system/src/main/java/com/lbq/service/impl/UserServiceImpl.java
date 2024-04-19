@@ -1,6 +1,7 @@
 package com.lbq.service.impl;
 
 import com.alibaba.cloud.commons.lang.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -145,5 +146,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         allFiles.addAll(avatars);
         allFiles.addAll(backgrounds);
         return allFiles;
+    }
+
+    @Override
+    public User getByUsername(String username) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUsername, username);
+        return super.getOne(queryWrapper);
     }
 }

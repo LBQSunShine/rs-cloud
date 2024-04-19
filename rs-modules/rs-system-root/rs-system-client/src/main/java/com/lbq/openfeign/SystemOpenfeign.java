@@ -4,6 +4,7 @@ import com.lbq.config.OpenfeignConfig;
 import com.lbq.utils.IdsReq;
 import com.lbq.vo.OperLogVo;
 import com.lbq.vo.TagVo;
+import com.lbq.vo.UserVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,4 +37,7 @@ public interface SystemOpenfeign {
 
     @GetMapping("/sys/openfeign/getUserFiles")
     List<String> getUserFiles();
+
+    @GetMapping("/sys/openfeign/getUserByUsername")
+    UserVo getUserByUsername(@RequestParam(name = "username") String username);
 }

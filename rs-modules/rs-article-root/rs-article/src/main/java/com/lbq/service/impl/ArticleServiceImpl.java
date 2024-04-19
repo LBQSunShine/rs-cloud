@@ -181,6 +181,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 List<CommentVo> commentVos = TreeUtils.convertToTree(comments);
                 articleVo.setCommentVos(commentVos);
             }
+            UserVo userVo = systemOpenfeign.getUserByUsername(record.getCreateBy());
+            articleVo.setUserVo(userVo);
             List<ArticleFile> articleFiles = articleFileService.listByArticleId(id);
             articleVo.setArticleFiles(articleFiles);
             articleVos.add(articleVo);

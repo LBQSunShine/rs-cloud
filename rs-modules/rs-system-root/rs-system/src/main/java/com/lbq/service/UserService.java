@@ -34,4 +34,6 @@ public interface UserService extends IService<User> {
     String upload(MultipartFile file);
 
     List<String> getUserFiles();
+
+    User getByUsername(String username);
 }
