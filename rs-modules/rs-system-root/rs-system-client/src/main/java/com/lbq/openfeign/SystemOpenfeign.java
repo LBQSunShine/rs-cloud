@@ -25,15 +25,15 @@ import java.util.Map;
 @FeignClient(value = "system", configuration = OpenfeignConfig.class)
 public interface SystemOpenfeign {
 
-    @PostMapping("/sys/openfeign/user-role/addUserRole")
+    @PostMapping("/sys/openfeign/addUserRole")
     void addUserRole(@RequestParam(name = "userId") Integer userId, @RequestParam(name = "roleCode") String roleCode);
 
-    @PostMapping("/sys/openfeign/log/addOperLog")
+    @PostMapping("/sys/openfeign/addOperLog")
     void addOperLog(@RequestBody OperLogVo operLogVo);
 
-    @PostMapping("/sys/openfeign/tag/getMapByIds")
+    @PostMapping("/sys/openfeign/getMapByIds")
     Map<Integer, TagVo> getMapByIds(@RequestBody IdsReq idsReq);
 
-    @GetMapping("/sys/openfeign/file/getUserFiles")
+    @GetMapping("/sys/openfeign/getUserFiles")
     List<String> getUserFiles();
 }

@@ -17,9 +17,9 @@ import java.util.List;
 @FeignClient(value = "article", configuration = OpenfeignConfig.class)
 public interface ArticleOpenfeign {
 
-    @PostMapping("/article/openfeign/upvote/saveArticleUpvote")
+    @PostMapping("/article/openfeign/saveArticleUpvote")
     void saveArticleUpvote();
 
-    @GetMapping("/article/openfeign/file/getArticleFiles")
+    @GetMapping("/article/openfeign/getArticleFiles")
     List<String> getArticleFiles();
 }

@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/file/openfeign")
-public class FileOpenfeign {
+public class FileOpenfeignController {
 
     @Autowired
     private FileService fileService;

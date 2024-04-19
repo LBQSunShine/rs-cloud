@@ -56,7 +56,9 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
         scheduler.clear();
         List<ScheduleJob> jobList = super.list();
         for (ScheduleJob scheduleJob : jobList) {
-            ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
+            if (StatusConstants.ENABLE.equals(scheduleJob.getStatus())) {
+                ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
+            }
         }
     }
 

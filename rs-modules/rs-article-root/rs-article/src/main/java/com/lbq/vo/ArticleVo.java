@@ -18,6 +18,8 @@ public class ArticleVo {
 
     private Article article;
 
+    private UserVo userVo;
+
     private List<TagVo> tagVos;
 
     private List<ArticleUpvote> articleUpvotes;

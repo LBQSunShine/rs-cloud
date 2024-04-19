@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.constants.StatusConstants;
 import com.lbq.mapper.UserMapper;
-import com.lbq.openfeign.FileServiceOpenfeign;
+import com.lbq.openfeign.FileOpenfeign;
 import com.lbq.pojo.Role;
 import com.lbq.pojo.User;
 import com.lbq.pojo.UserRole;
@@ -43,7 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private UserRoleService userRoleService;
     @Autowired
-    private FileServiceOpenfeign fileServiceOpenfeign;
+    private FileOpenfeign fileOpenfeign;
 
     @Override
     public Page<User> page(PageVo pageVo, String keyword) {
@@ -132,7 +132,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public String upload(MultipartFile file) {
-        FileVo upload = fileServiceOpenfeign.upload(file);
+        FileVo upload = fileOpenfeign.upload(file);
         return upload.getUrl();
     }
 

@@ -8,7 +8,7 @@ import com.lbq.constants.ArticleConstants;
 import com.lbq.constants.StatusConstants;
 import com.lbq.context.BaseContext;
 import com.lbq.mapper.ArticleMapper;
-import com.lbq.openfeign.FileServiceOpenfeign;
+import com.lbq.openfeign.FileOpenfeign;
 import com.lbq.openfeign.SystemOpenfeign;
 import com.lbq.pojo.*;
 import com.lbq.service.*;
@@ -51,7 +51,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private ArticleFileService articleFileService;
 
     @Autowired
-    private FileServiceOpenfeign fileServiceOpenfeign;
+    private FileOpenfeign fileOpenfeign;
 
     @Override
     public Page<ArticleVo> page(PageVo pageVo, String keyword) {
@@ -153,7 +153,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public String upload(MultipartFile file) {
-        FileVo upload = fileServiceOpenfeign.upload(file);
+        FileVo upload = fileOpenfeign.upload(file);
         return upload.getUrl();
     }
 

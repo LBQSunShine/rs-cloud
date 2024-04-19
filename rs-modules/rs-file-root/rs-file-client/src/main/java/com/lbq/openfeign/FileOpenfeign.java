@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Component
 @FeignClient(value = "file", configuration = OpenfeignFormConfig.class)
-public interface FileServiceOpenfeign {
+public interface FileOpenfeign {
     @PostMapping(value = "/file/openfeign/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     FileVo upload(MultipartFile file);
 
