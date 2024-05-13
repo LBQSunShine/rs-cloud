@@ -58,6 +58,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Page<ArticleVo> result = new Page<>(pageVo.getPageNo(), pageVo.getPageSize());
         Page<Article> page = new Page<>(pageVo.getPageNo(), pageVo.getPageSize());
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().orderByDesc(Article::getCreateTime);
         Page<Article> resPage = super.page(page, queryWrapper);
         List<ArticleVo> articleVos = this.setView(resPage.getRecords(), false);
         result.setRecords(articleVos);
