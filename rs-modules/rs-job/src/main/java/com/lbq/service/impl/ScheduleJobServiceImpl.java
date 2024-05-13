@@ -141,7 +141,6 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
             scheduleJob.setCreateBy(BaseContext.getUsername());
             scheduleJob.setCreateTime(new Date());
             super.save(scheduleJob);
-            ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
             return true;
         });
         if (res == null) {
