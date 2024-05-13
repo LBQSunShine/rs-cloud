@@ -34,6 +34,10 @@ public class ArticleUpvote implements Serializable {
 
     private String upvoteBy;
 
+    public ArticleUpvote() {
+
+    }
+
     public ArticleUpvote(String upvoteBy, String articleId, String status, String existsKey) {
         this.upvoteBy = upvoteBy;
         this.articleId = Integer.valueOf(articleId);

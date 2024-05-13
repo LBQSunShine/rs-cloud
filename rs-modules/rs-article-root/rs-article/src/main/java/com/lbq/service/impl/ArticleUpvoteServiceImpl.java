@@ -4,16 +4,17 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.constants.ArticleConstants;
+import com.lbq.constants.StatusConstants;
 import com.lbq.mapper.ArticleUpvoteMapper;
 import com.lbq.pojo.ArticleUpvote;
 import com.lbq.service.ArticleUpvoteService;
 import com.lbq.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.Cursor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,31 +36,42 @@ public class ArticleUpvoteServiceImpl extends ServiceImpl<ArticleUpvoteMapper, A
     @Override
     @Transactional
     public void saveArticleUpvote() {
-        Cursor<Map.Entry<Object, Object>> cursor = redisService.hGetValuesWithPrefix(ArticleConstants.UPVOTE);
+        List<Map<String, String>> mapList = redisService.hGetValuesWithPrefix(ArticleConstants.UPVOTE);
         try {
             List<ArticleUpvote> articleUpvoteList = new ArrayList<>();
-            while (cursor.hasNext()) {
-                Map.Entry<Object, Object> next = cursor.next();
-                String key = next.getKey().toString();
-                String[] split = key.split("::");
-                String value = next.getValue().toString();
-                ArticleUpvote articleUpvote = new ArticleUpvote(split[0], split[1], value, key);
-                articleUpvoteList.add(articleUpvote);
-            }
-            if (CollectionUtils.isNotEmpty(articleUpvoteList)) {
-                articleUpvoteMapper.saveArticleUpvote(articleUpvoteList);
+            for (Map<String, String> item : mapList) {
+                Iterator<Map.Entry<String, String>> iterator = item.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry<String, String> next = iterator.next();
+                    String key = next.getKey();
+                    String[] split = key.split("::");
+                    String value = next.getValue();
+                    ArticleUpvote articleUpvote = new ArticleUpvote(split[0], split[1], value, key);
+                    articleUpvoteList.add(articleUpvote);
+                }
+                if (CollectionUtils.isNotEmpty(articleUpvoteList)) {
+                    articleUpvoteMapper.saveArticleUpvote(articleUpvoteList);
+                }
+                this.removeUnUpvote();
             }
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
-        } finally {
-            cursor.close();
         }
     }
 
     @Override
     public List<ArticleUpvote> listByArticleId(Integer articleId) {
         LambdaQueryWrapper<ArticleUpvote> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ArticleUpvote::getArticleId, articleId);
+        queryWrapper
+                .eq(ArticleUpvote::getArticleId, articleId)
+                .eq(ArticleUpvote::getStatus, StatusConstants.STATUS_1);
         return super.list(queryWrapper);
+    }
+
+    @Override
+    public void removeUnUpvote() {
+        LambdaQueryWrapper<ArticleUpvote> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ArticleUpvote::getStatus, StatusConstants.STATUS_0);
+        super.remove(queryWrapper);
     }
 }

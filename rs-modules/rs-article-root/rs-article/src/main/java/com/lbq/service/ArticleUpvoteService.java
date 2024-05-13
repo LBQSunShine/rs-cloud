@@ -16,4 +16,6 @@ public interface ArticleUpvoteService extends IService<ArticleUpvote> {
     void saveArticleUpvote();
 
     List<ArticleUpvote> listByArticleId(Integer articleId);
+
+    void removeUnUpvote();
 }

@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -193,7 +196,17 @@ public class RedisService {
      * @param prefix
      * @return
      */
-    public <T> Cursor<T> hGetValuesWithPrefix(String prefix) {
-        return redisTemplate.opsForHash().scan(prefix, ScanOptions.NONE);
+    public <T> List<Map<String, T>> hGetValuesWithPrefix(String prefix) {
+        // 使用keys()方法获取所有匹配前缀的key
+        Set<String> keys = redisTemplate.keys(prefix + "*");
+        List<Map<String, T>> resMapList = new ArrayList<>();
+        // 如果你想获取对应key的值，可以这样操作
+        for (String key : keys) {
+            Map<String, T> map = this.hGet(key);
+            if (map != null) {
+                resMapList.add(map);
+            }
+        }
+        return resMapList;
     }
 }
