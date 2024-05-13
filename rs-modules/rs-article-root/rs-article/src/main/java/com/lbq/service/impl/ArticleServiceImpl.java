@@ -123,6 +123,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             map.put(hKey, StatusConstants.STATUS_1);
             redisService.hSet(key, map);
         }
+        // 十分钟
+        long expireTime = 10 * 60;
+        redisService.expire(key, expireTime);
     }
 
     @Override
@@ -138,6 +141,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             map.put(hKey, StatusConstants.STATUS_0);
             redisService.hSet(key, map);
         }
+        // 十分钟
+        long expireTime = 10 * 60;
+        redisService.expire(key, expireTime);
     }
 
     @Override
