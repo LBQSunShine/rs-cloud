@@ -2,6 +2,7 @@ package com.lbq.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.constants.ArticleConstants;
@@ -185,6 +186,31 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 List<ArticleUpvote> articleUpvotes = articleUpvoteService.listByArticleId(id);
                 articleVo.setArticleUpvotes(articleUpvotes);
                 List<Comment> comments = commentService.listByArticleId(id);
+                List<String> usernames = comments.stream().map(Comment::getCreateBy).collect(Collectors.toList());
+                Map<String, UserVo> userVoMap = systemOpenfeign.getMapByUsernames(usernames);
+                for (Comment comment : comments) {
+                    String createBy = comment.getCreateBy();
+                    String nickname = comment.getNickname();
+                    UserVo userVo = userVoMap.get(createBy);
+                    if (userVo != null && StringUtils.isBlank(nickname)) {
+                        comment.setNickname(userVo.getNickname());
+                        comment.setAvatar(userVo.getAvatar());
+                    }
+                    Integer parentId = comment.getParentId();
+                    if (parentId != null) {
+                        Comment parentComment = comments.stream().filter(item -> item.getId() == parentId).findFirst().orElse(null);
+                        if (parentComment != null) {
+                            String parentCreateBy = parentComment.getCreateBy();
+                            String parentNickname = parentComment.getNickname();
+                            UserVo parentUserVo = userVoMap.get(parentCreateBy);
+                            if (parentUserVo != null && StringUtils.isBlank(parentNickname)) {
+                                parentComment.setNickname(userVo.getNickname());
+                                parentComment.setAvatar(userVo.getAvatar());
+                            }
+                            comment.setParentNickname(parentNickname);
+                        }
+                    }
+                }
                 List<CommentVo> commentVos = TreeUtils.convertToTree(comments);
                 articleVo.setCommentVos(commentVos);
             }

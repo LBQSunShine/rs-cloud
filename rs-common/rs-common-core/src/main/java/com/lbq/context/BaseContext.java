@@ -85,4 +85,8 @@ public class BaseContext {
         }
         return map.get(key);
     }
+
+    public static void clear() {
+        THREAD_LOCAL.remove();
+    }
 }

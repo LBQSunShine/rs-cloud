@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -40,4 +41,7 @@ public interface SystemOpenfeign {
 
     @GetMapping("/sys/openfeign/getUserByUsername")
     UserVo getUserByUsername(@RequestParam(name = "username") String username);
+
+    @PostMapping("/sys/openfeign/getMapByUsernames")
+    Map<String, UserVo> getMapByUsernames(@RequestBody Collection<String> usernames);
 }

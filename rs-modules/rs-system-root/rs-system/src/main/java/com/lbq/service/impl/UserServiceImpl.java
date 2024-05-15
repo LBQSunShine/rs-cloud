@@ -19,15 +19,13 @@ import com.lbq.service.UserService;
 import com.lbq.vo.FileVo;
 import com.lbq.vo.PageVo;
 import com.lbq.vo.SortField;
+import com.lbq.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -153,5 +151,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUsername, username);
         return super.getOne(queryWrapper);
+    }
+
+    @Override
+    public Map<String, UserVo> getMapByUsernames(Collection<String> usernames) {
+        if (CollectionUtils.isEmpty(usernames)) {
+            return Collections.EMPTY_MAP;
+        }
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(User::getUsername, usernames);
+        List<User> list = super.list(queryWrapper);
+        Map<String, UserVo> res = new HashMap<>();
+        for (User user : list) {
+            UserVo userVo = new UserVo();
+            userVo.setId(user.getId());
+            userVo.setAvatar(user.getAvatar());
+            userVo.setNickname(user.getNickname());
+            res.put(user.getUsername(), userVo);
+        }
+        return res;
     }
 }

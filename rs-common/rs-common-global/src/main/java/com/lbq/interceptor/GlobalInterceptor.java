@@ -63,4 +63,12 @@ public class GlobalInterceptor implements HandlerInterceptor {
         redisService.delete(from);
         return true;
     }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        String requestURI = request.getRequestURI();
+        if (!requestURI.contains("/openfeign")) {
+            BaseContext.clear();
+        }
+    }
 }
