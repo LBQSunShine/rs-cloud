@@ -186,9 +186,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 tagVos.add(tagVoMap.get(articleTag.getTagId()));
             }
             articleVo.setTagVos(tagVos);
+            List<ArticleUpvote> articleUpvotes = articleUpvoteService.listByArticleId(id);
+            articleVo.setArticleUpvotes(articleUpvotes);
+            articleVo.setUpvoteStatus(StatusConstants.STATUS_0);
+            ArticleUpvote articleUpvote = articleUpvotes.stream().filter(item -> item.getUpvoteBy().equals(BaseContext.getUsername()) && StatusConstants.STATUS_1.equals(item.getStatus())).findFirst().orElse(null);
+            if (articleUpvote != null) {
+                articleVo.setUpvoteStatus(StatusConstants.STATUS_1);
+            }
+            articleVo.setUpvoteSize(articleUpvotes.size());
             if (isDetail) {
-                List<ArticleUpvote> articleUpvotes = articleUpvoteService.listByArticleId(id);
-                articleVo.setArticleUpvotes(articleUpvotes);
                 List<Comment> comments = commentService.listByArticleId(id);
                 List<String> usernames = comments.stream().map(Comment::getCreateBy).collect(Collectors.toList());
                 Map<String, UserVo> userVoMap = systemOpenfeign.getMapByUsernames(usernames);

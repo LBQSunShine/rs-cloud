@@ -24,6 +24,10 @@ public class ArticleVo {
 
     private List<ArticleUpvote> articleUpvotes;
 
+    private String upvoteStatus;
+
+    private Integer upvoteSize;
+
     private List<CommentVo> commentVos;
 
     private List<ArticleFile> articleFiles;
