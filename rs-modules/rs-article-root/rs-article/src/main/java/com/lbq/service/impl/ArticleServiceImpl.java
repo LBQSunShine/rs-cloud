@@ -192,26 +192,22 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 List<Comment> comments = commentService.listByArticleId(id);
                 List<String> usernames = comments.stream().map(Comment::getCreateBy).collect(Collectors.toList());
                 Map<String, UserVo> userVoMap = systemOpenfeign.getMapByUsernames(usernames);
+                Map<Integer, Comment> commentMap = new HashMap<>();
                 for (Comment comment : comments) {
                     String createBy = comment.getCreateBy();
-                    String nickname = comment.getNickname();
                     UserVo userVo = userVoMap.get(createBy);
-                    if (userVo != null && StringUtils.isBlank(nickname)) {
+                    if (userVo != null) {
                         comment.setNickname(userVo.getNickname());
                         comment.setAvatar(userVo.getAvatar());
                     }
+                    commentMap.put(comment.getId(), comment);
+                }
+                for (Comment comment : comments) {
                     Integer parentId = comment.getParentId();
                     if (parentId != null) {
-                        Comment parentComment = comments.stream().filter(item -> item.getId() == parentId).findFirst().orElse(null);
+                        Comment parentComment = commentMap.get(parentId);
                         if (parentComment != null) {
-                            String parentCreateBy = parentComment.getCreateBy();
-                            String parentNickname = parentComment.getNickname();
-                            UserVo parentUserVo = userVoMap.get(parentCreateBy);
-                            if (parentUserVo != null && StringUtils.isBlank(parentNickname)) {
-                                parentComment.setNickname(userVo.getNickname());
-                                parentComment.setAvatar(userVo.getAvatar());
-                            }
-                            comment.setParentNickname(parentNickname);
+                            comment.setParentNickname(parentComment.getNickname());
                         }
                     }
                 }
