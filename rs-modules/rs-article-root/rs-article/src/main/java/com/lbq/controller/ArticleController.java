@@ -6,12 +6,15 @@ import com.lbq.pojo.Article;
 import com.lbq.pojo.Comment;
 import com.lbq.service.ArticleService;
 import com.lbq.utils.IdsReq;
+import com.lbq.utils.StringFormatUtils;
 import com.lbq.vo.ArticleVo;
 import com.lbq.vo.PageVo;
 import com.lbq.vo.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * 文章
@@ -27,8 +30,12 @@ public class ArticleController {
     private ArticleService articleService;
 
     @GetMapping("/page")
-    public R<?> page(PageVo pageVo, @RequestParam(name = "keyword", required = false) String keyword) {
-        Page<ArticleVo> res = articleService.page(pageVo, keyword);
+    public R<?> page(PageVo pageVo,
+                     @RequestParam(name = "keyword", required = false) String keyword,
+                     @RequestParam(name = "tagIds", required = false) String tagIds,
+                     @RequestParam(name = "selectType", required = false) String selectType) {
+        List<Integer> tIds = StringFormatUtils.stringToList(tagIds, ",");
+        Page<ArticleVo> res = articleService.page(pageVo, keyword, selectType, tIds);
         return R.success(res);
     }
 

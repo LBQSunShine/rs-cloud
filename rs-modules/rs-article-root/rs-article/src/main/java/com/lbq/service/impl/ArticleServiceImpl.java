@@ -1,6 +1,5 @@
 package com.lbq.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -34,6 +33,9 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
     @Autowired
+    private ArticleMapper articleMapper;
+
+    @Autowired
     private ArticleTagService articleTagService;
 
     @Autowired
@@ -55,12 +57,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private FileOpenfeign fileOpenfeign;
 
     @Override
-    public Page<ArticleVo> page(PageVo pageVo, String keyword) {
+    public Page<ArticleVo> page(PageVo pageVo, String keyword, String selectType, Collection<Integer> tagIds) {
         Page<ArticleVo> result = new Page<>(pageVo.getPageNo(), pageVo.getPageSize());
         Page<Article> page = new Page<>(pageVo.getPageNo(), pageVo.getPageSize());
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().orderByDesc(Article::getCreateTime);
-        Page<Article> resPage = super.page(page, queryWrapper);
+        String username = null;
+        if ("MINE".equals(selectType)) {
+            username = BaseContext.getUsername();
+        }
+        Page<Article> resPage = articleMapper.page(page, keyword, username, tagIds);
         List<ArticleVo> articleVos = this.setView(resPage.getRecords(), false);
         result.setRecords(articleVos);
         result.setTotal(resPage.getTotal());
@@ -211,7 +215,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                         }
                     }
                 }
-                List<CommentVo> commentVos = TreeUtils.convertToTree(comments);
+                List<CommentVo> commentVos = TreeUtils.convertToTwoLevelTree(comments);
                 articleVo.setCommentVos(commentVos);
             }
             UserVo userVo = systemOpenfeign.getUserByUsername(record.getCreateBy());

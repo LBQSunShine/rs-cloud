@@ -19,7 +19,7 @@ import java.util.List;
  */
 public interface ArticleService extends IService<Article> {
 
-    Page<ArticleVo> page(PageVo pageVo, String keyword);
+    Page<ArticleVo> page(PageVo pageVo, String keyword, String selectType, Collection<Integer> tagIds);
 
     ArticleVo getById(Integer id);
 

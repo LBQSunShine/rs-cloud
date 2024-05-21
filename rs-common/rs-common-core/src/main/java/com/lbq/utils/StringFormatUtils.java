@@ -1,6 +1,8 @@
 package com.lbq.utils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 字符串拼接工具
@@ -18,5 +20,17 @@ public class StringFormatUtils {
             text = text.replaceFirst("\\{}", item.toString());
         }
         return text;
+    }
+
+    public static <T> List<T> stringToList(String text, String split) {
+        List<T> list = new ArrayList<>();
+        if (text == null || "".equals(text.trim())) {
+            return list;
+        }
+        String[] strings = text.split(split);
+        for (String item : strings) {
+            list.add((T) item);
+        }
+        return list;
     }
 }

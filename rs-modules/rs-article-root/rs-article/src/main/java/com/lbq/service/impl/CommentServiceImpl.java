@@ -21,7 +21,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public List<Comment> listByArticleId(Integer articleId) {
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Comment::getArticleId, articleId);
+        queryWrapper
+                .eq(Comment::getArticleId, articleId)
+                .orderByDesc(Comment::getCreateTime);
         return super.list(queryWrapper);
     }
 }
