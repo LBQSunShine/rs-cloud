@@ -95,6 +95,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String encrypt = SecurityUtils.encrypt(password);
         User user = new User();
         user.setUsername(username);
+        user.setNickname(username);
         user.setPassword(encrypt);
         user.setStatus(StatusConstants.ENABLE);
         boolean save = super.save(user);
