@@ -19,7 +19,7 @@
                 and (ra.create_by = #{username})
             </if>
             <if test="tagIds != null and tagIds.size() != 0">
-                and (rat.id in
+                and (rat.tag_id in
                     <foreach collection="tagIds" item="tagId" open="(" separator="," close=")">
                         #{tagId}
                     </foreach>
