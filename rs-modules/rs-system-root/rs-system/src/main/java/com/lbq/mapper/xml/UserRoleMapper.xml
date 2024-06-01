@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lbq.mapper.UserRoleMapper">
-
+    <select id="hasAuth" resultType="java.lang.Integer">
+        select
+            count(*)
+        from rs_user_role rur
+        left join rs_role rr on rr.id = rur.role_id
+        left join rs_user ru on ru.id = rur.user_id
+        where ru.username = #{username}
+        and rr.code = 'admin'
+    </select>
 </mapper>

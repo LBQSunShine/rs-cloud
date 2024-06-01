@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.constants.StatusConstants;
+import com.lbq.context.BaseContext;
 import com.lbq.mapper.UserMapper;
 import com.lbq.openfeign.FileOpenfeign;
 import com.lbq.pojo.Role;
@@ -170,5 +171,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             res.put(user.getUsername(), userVo);
         }
         return res;
+    }
+
+    @Override
+    public boolean hasAuth() {
+        return userRoleService.hasAuth(BaseContext.getUsername());
     }
 }

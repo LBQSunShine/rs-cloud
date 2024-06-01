@@ -17,4 +17,6 @@ public interface UserRoleService extends IService<UserRole> {
     List<UserRole> listByUserIds(Collection<Integer> userIds);
 
     void addUserRole(Integer userId, String roleCode);
+
+    boolean hasAuth(String username);
 }

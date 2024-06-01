@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -61,6 +62,11 @@ public class UserController {
             userService.disable(user);
         });
         return R.success(message);
+    }
+
+    @GetMapping("/hasAuth")
+    public R<?> hasAuth(HttpServletRequest request) {
+        return R.success(userService.hasAuth());
     }
 
     private List<String> action(Collection<Integer> ids, String option, ActionFunction<User> fun) {

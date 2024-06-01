@@ -26,6 +26,8 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private UserRoleMapper userRoleMapper;
 
     @Override
     public List<UserRole> listByUserIds(Collection<Integer> userIds) {
@@ -44,5 +46,10 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         userRole.setUserId(userId);
         userRole.setRoleId(role.getId());
         super.save(userRole);
+    }
+
+    @Override
+    public boolean hasAuth(String username) {
+        return userRoleMapper.hasAuth(username) > 0;
     }
 }

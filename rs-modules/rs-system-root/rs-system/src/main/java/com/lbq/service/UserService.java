@@ -41,4 +41,6 @@ public interface UserService extends IService<User> {
     User getByUsername(String username);
 
     Map<String, UserVo> getMapByUsernames(Collection<String> usernames);
+
+    boolean hasAuth();
 }

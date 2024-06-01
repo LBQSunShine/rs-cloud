@@ -3,6 +3,7 @@ package com.lbq.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lbq.pojo.UserRole;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 用户角色关系
@@ -13,4 +14,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserRoleMapper extends BaseMapper<UserRole> {
 
+    Integer hasAuth(@Param("username") String username);
 }
