@@ -16,3 +16,17 @@ spring:
           - data-id: ${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
       username: nacos
       password: nacos
+seata:
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 127.0.0.1:8848
+      group: "DEFAULT_GROUP"
+      username: "nacos"
+      password: "nacos"
+      context-path: ""
+  tx-service-group: default_tx_group
+  service:
+    vgroup-mapping:
+      default_tx_group: default
