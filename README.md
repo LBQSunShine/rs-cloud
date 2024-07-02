@@ -44,6 +44,7 @@ rs-cloud
 5. 文章点赞
 6. 文章评论
 7. 文件上传
+8. 实时消息
 #### 演示图
 ![img.png](images/img.png)
 ![img_1.png](images/img_1.png)
