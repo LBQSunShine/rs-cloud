@@ -11,8 +11,8 @@
 * 自定义注解 + Aop的方式异步记录用户操作数据
 * 使用Redis + 定时任务实现文章点赞功能
 * quartz实现定时任务调度
-* 流量控制框架选型Sentinel
-* 微服务统一日志ELK
+* 流量控制框架选型Sentinel（待办）
+* 微服务统一日志ELK（待办）
 #### 系统模块
 ```java
 rs-cloud
@@ -36,3 +36,24 @@ rs-cloud
                 |——rs-system        系统服务[8082]
                 |——rs-system-client 系统服务api
 ```
+#### 内置功能
+1. 用户管理
+2. 标签管理
+3. 定时任务管理
+4. 发布文章
+5. 文章点赞
+6. 文章评论
+7. 文件上传
+#### 演示图
+![img.png](img.png)
+![img_1.png](img_1.png)
+![img_2.png](img_2.png)
+![img_3.png](img_3.png)
+![img_5.png](img_5.png)
+![img_4.png](img_4.png)
+![img_6.png](img_6.png)
+![img_7.png](img_7.png)
+![img_8.png](img_8.png)
+![img_9.png](img_9.png)
+
+
