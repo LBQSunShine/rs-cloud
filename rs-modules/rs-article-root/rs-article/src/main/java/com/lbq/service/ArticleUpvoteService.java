@@ -3,6 +3,7 @@ package com.lbq.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lbq.pojo.ArticleUpvote;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,4 +19,6 @@ public interface ArticleUpvoteService extends IService<ArticleUpvote> {
     List<ArticleUpvote> listByArticleId(Integer articleId);
 
     void removeUnUpvote();
+
+    void removeByArticleIds(Collection<Integer> articleIds);
 }

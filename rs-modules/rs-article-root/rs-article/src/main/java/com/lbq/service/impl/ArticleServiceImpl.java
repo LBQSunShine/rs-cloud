@@ -1,5 +1,6 @@
 package com.lbq.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -166,6 +167,26 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public String upload(MultipartFile file) {
         FileVo upload = fileOpenfeign.upload(file);
         return upload.getUrl();
+    }
+
+    @Override
+    public void delete(Collection<Integer> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return;
+        }
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .in(Article::getId, ids)
+                .eq(Article::getCreateBy, BaseContext.getUsername());
+        super.remove(queryWrapper);
+        // 删除评论
+        commentService.removeByArticleIds(ids);
+        // 删除点赞
+        articleUpvoteService.removeByArticleIds(ids);
+        // 删除文件
+        articleFileService.removeByArticleIds(ids);
+        // 删除标签关联
+        articleTagService.removeByArticleIds(ids);
     }
 
     @Override

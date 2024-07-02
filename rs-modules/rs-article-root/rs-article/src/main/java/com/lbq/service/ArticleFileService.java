@@ -3,6 +3,7 @@ package com.lbq.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lbq.pojo.ArticleFile;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,4 +19,6 @@ public interface ArticleFileService extends IService<ArticleFile> {
     List<String> getArticleFiles();
 
     void saveByArticle(Integer articleId, List<ArticleFile> articleFiles);
+
+    void removeByArticleIds(Collection<Integer> articleIds);
 }

@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 文章点赞
@@ -72,6 +69,16 @@ public class ArticleUpvoteServiceImpl extends ServiceImpl<ArticleUpvoteMapper, A
     public void removeUnUpvote() {
         LambdaQueryWrapper<ArticleUpvote> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ArticleUpvote::getStatus, StatusConstants.STATUS_0);
+        super.remove(queryWrapper);
+    }
+
+    @Override
+    public void removeByArticleIds(Collection<Integer> articleIds) {
+        if (CollectionUtils.isEmpty(articleIds)) {
+            return;
+        }
+        LambdaQueryWrapper<ArticleUpvote> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(ArticleUpvote::getArticleId, articleIds);
         super.remove(queryWrapper);
     }
 }

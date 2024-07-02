@@ -3,6 +3,7 @@ package com.lbq.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lbq.pojo.ArticleTag;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,4 +19,6 @@ public interface ArticleTagService extends IService<ArticleTag> {
     void removeByArticleId(Integer articleId);
 
     List<ArticleTag> listByArticleId(Integer articleId);
+
+    void removeByArticleIds(Collection<Integer> articleIds);
 }

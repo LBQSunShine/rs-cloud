@@ -9,6 +9,7 @@ import com.lbq.service.ArticleTagService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -46,5 +47,15 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
         LambdaQueryWrapper<ArticleTag> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ArticleTag::getArticleId, articleId);
         return super.list(queryWrapper);
+    }
+
+    @Override
+    public void removeByArticleIds(Collection<Integer> articleIds) {
+        if (CollectionUtils.isEmpty(articleIds)) {
+            return;
+        }
+        LambdaQueryWrapper<ArticleTag> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(ArticleTag::getArticleId, articleIds);
+        super.remove(queryWrapper);
     }
 }

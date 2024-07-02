@@ -38,4 +38,6 @@ public interface ArticleService extends IService<Article> {
     List<ArticleVo> setView(List<Article> articles, boolean isDetail);
 
     String upload(MultipartFile file);
+
+    void delete(Collection<Integer> ids);
 }

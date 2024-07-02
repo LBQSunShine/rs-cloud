@@ -1,12 +1,14 @@
 package com.lbq.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.mapper.ArticleFileMapper;
 import com.lbq.pojo.ArticleFile;
 import com.lbq.service.ArticleFileService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,5 +42,15 @@ public class ArticleFileServiceImpl extends ServiceImpl<ArticleFileMapper, Artic
             articleFile.setArticleId(articleId);
         }
         super.saveBatch(articleFiles);
+    }
+
+    @Override
+    public void removeByArticleIds(Collection<Integer> articleIds) {
+        if (CollectionUtils.isEmpty(articleIds)) {
+            return;
+        }
+        LambdaQueryWrapper<ArticleFile> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(ArticleFile::getArticleId, articleIds);
+        super.remove(queryWrapper);
     }
 }

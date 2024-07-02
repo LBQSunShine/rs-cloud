@@ -59,7 +59,7 @@ public class ArticleController {
 
     @PostMapping("/delete")
     public R<?> delete(@RequestBody IdsReq idsReq) {
-        articleService.removeByIds(idsReq.getIds());
+        articleService.delete(idsReq.getIds());
         return R.success("删除成功!");
     }
 

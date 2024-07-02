@@ -3,6 +3,7 @@ package com.lbq.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lbq.pojo.Comment;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -14,4 +15,6 @@ import java.util.List;
 public interface CommentService extends IService<Comment> {
 
     List<Comment> listByArticleId(Integer articleId);
+
+    void removeByArticleIds(Collection<Integer> articleIds);
 }
