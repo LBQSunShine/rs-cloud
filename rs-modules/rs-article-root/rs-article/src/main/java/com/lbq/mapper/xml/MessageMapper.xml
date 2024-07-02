@@ -13,7 +13,7 @@
         from rs_message rm
         left join rs_article ra on ra.id = rm.article_id
         where ra.create_by = #{username}
-        and rm.status = '1'
+        and rm.status = '0'
         order by rm.create_time desc
     </select>
 </mapper>

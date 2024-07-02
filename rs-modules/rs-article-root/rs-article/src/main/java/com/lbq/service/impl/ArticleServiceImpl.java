@@ -204,6 +204,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleFileService.removeByArticleIds(ids);
         // 删除标签关联
         articleTagService.removeByArticleIds(ids);
+        // 删除所有消息
+        messageService.removeByArticleIds(ids);
     }
 
     @Override

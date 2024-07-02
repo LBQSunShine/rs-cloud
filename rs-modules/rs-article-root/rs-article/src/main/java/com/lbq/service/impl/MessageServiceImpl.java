@@ -2,6 +2,7 @@ package com.lbq.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.constants.StatusConstants;
 import com.lbq.context.BaseContext;
@@ -11,6 +12,7 @@ import com.lbq.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -43,6 +45,16 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
     public void deleteIsReadMessage() {
         LambdaQueryWrapper<Message> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Message::getStatus, StatusConstants.STATUS_1);
+        super.remove(queryWrapper);
+    }
+
+    @Override
+    public void removeByArticleIds(Collection<Integer> articleIds) {
+        if (CollectionUtils.isEmpty(articleIds)) {
+            return;
+        }
+        LambdaQueryWrapper<Message> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(Message::getArticleId, articleIds);
         super.remove(queryWrapper);
     }
 }
