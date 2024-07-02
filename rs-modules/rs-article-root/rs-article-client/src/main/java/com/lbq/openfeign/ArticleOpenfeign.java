@@ -22,4 +22,7 @@ public interface ArticleOpenfeign {
 
     @GetMapping("/article/openfeign/getArticleFiles")
     List<String> getArticleFiles();
+
+    @PostMapping("/article/openfeign/deleteIsReadMessage")
+    void deleteIsReadMessage();
 }

@@ -3,6 +3,7 @@ package com.lbq.openfeign;
 
 import com.lbq.service.ArticleFileService;
 import com.lbq.service.ArticleUpvoteService;
+import com.lbq.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,9 @@ public class ArticleOpenfeignController {
     @Autowired
     private ArticleUpvoteService articleUpvoteService;
 
+    @Autowired
+    private MessageService messageService;
+
     @GetMapping("/getArticleFiles")
     public List<String> getArticleFiles() {
         return articleFileService.getArticleFiles();
@@ -35,6 +39,11 @@ public class ArticleOpenfeignController {
     @PostMapping("/saveArticleUpvote")
     public void saveArticleUpvote() {
         articleUpvoteService.saveArticleUpvote();
+    }
+
+    @PostMapping("/deleteIsReadMessage")
+    public void deleteIsReadMessage() {
+        messageService.deleteIsReadMessage();
     }
 }
 

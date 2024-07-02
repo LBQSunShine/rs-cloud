@@ -4,6 +4,7 @@ package com.lbq.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lbq.pojo.Article;
 import com.lbq.pojo.Comment;
+import com.lbq.pojo.Message;
 import com.lbq.service.ArticleService;
 import com.lbq.utils.IdsReq;
 import com.lbq.utils.StringFormatUtils;
@@ -85,6 +86,18 @@ public class ArticleController {
     public R<?> deleteComment(@RequestBody IdsReq idsReq) {
         articleService.deleteComment(idsReq.getIds());
         return R.success("删除成功!");
+    }
+
+    @PostMapping("/readMessage")
+    public R<?> readMessage(@RequestBody Message message) {
+        articleService.readMessage(message);
+        return R.success("操作成功!");
+    }
+
+    @GetMapping("/listMessage")
+    public R<?> listMessage() {
+        List<Message> messages = articleService.listMessage();
+        return R.success(messages);
     }
 
     @PostMapping("/upload")

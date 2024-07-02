@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lbq.pojo.Article;
 import com.lbq.pojo.Comment;
+import com.lbq.pojo.Message;
 import com.lbq.vo.ArticleVo;
 import com.lbq.vo.PageVo;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,4 +41,8 @@ public interface ArticleService extends IService<Article> {
     String upload(MultipartFile file);
 
     void delete(Collection<Integer> ids);
+
+    void readMessage(Message message);
+
+    List<Message> listMessage();
 }

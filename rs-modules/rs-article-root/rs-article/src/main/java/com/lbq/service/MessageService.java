@@ -3,6 +3,8 @@ package com.lbq.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lbq.pojo.Message;
 
+import java.util.List;
+
 /**
  * 消息
  *
@@ -11,4 +13,9 @@ import com.lbq.pojo.Message;
  */
 public interface MessageService extends IService<Message> {
 
+    void readMessage(Message message);
+
+    List<Message> listMessage();
+
+    void deleteIsReadMessage();
 }

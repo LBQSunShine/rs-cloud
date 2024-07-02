@@ -168,6 +168,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Message message = new Message();
         message.setArticleId(comment.getArticleId());
         message.setType("COMMENT");
+        message.setStatus(StatusConstants.STATUS_0);
         message.setCreateBy(username);
         message.setCreateTime(date);
         messageService.save(message);
@@ -203,6 +204,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleFileService.removeByArticleIds(ids);
         // 删除标签关联
         articleTagService.removeByArticleIds(ids);
+    }
+
+    @Override
+    public void readMessage(Message message) {
+        messageService.readMessage(message);
+    }
+
+    @Override
+    public List<Message> listMessage() {
+        return messageService.listMessage();
     }
 
     @Override
