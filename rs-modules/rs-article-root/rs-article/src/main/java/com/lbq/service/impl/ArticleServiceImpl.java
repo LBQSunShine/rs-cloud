@@ -1,5 +1,6 @@
 package com.lbq.service.impl;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -55,6 +56,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private FileOpenfeign fileOpenfeign;
+
+    @Autowired
+    private WebSocketService webSocketService;
+
+    @Autowired
+    private MessageService messageService;
 
     @Override
     public Page<ArticleVo> page(PageVo pageVo, String keyword, String selectType, Collection<Integer> tagIds) {
@@ -153,9 +160,18 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public void comment(Comment comment) {
-        comment.setCreateBy(BaseContext.getUsername());
-        comment.setCreateTime(new Date());
+        String username = BaseContext.getUsername();
+        Date date = new Date();
+        comment.setCreateBy(username);
+        comment.setCreateTime(date);
         commentService.save(comment);
+        Message message = new Message();
+        message.setArticleId(comment.getArticleId());
+        message.setType("COMMENT");
+        message.setCreateBy(username);
+        message.setCreateTime(date);
+        messageService.save(message);
+        webSocketService.sendMessage(username, JSONObject.toJSONString(message));
     }
 
     @Override

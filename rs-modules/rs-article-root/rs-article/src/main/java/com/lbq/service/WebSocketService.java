@@ -1,13 +1,18 @@
 package com.lbq.service;
 
+import com.lbq.constants.TokenConstants;
+import com.lbq.utils.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -17,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2024-07-02
  */
 @Component
-@ServerEndpoint("/websocket/{username}")
+@ServerEndpoint("/websocket/{username}/{token}")
 public class WebSocketService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketService.class);
@@ -36,21 +41,18 @@ public class WebSocketService {
                 return;
             }
 
-//            Map<String, List<String>> requestParameterMap = session.getRequestParameterMap();
-//            List<String> tokens = requestParameterMap.get("token");
-//            if (CollectionUtils.isEmpty(tokens)) {
-//                throw new AuthorizationException("WebSocket Login Fail！token null");
-//            }
-//            String ticket = tokens.get(0);
-//            Map<String, Claim> decode = JwtUtil.decode(ticket);
-//            if (decode == null) {
-//                throw new AuthorizationException("WebSocket Login Fail！decode null");
-//            }
-//            Claim userIdClaim = decode.get(TokenConstant.USER_ID);
-//            if (userIdClaim == null) {
-//                throw new AuthorizationException("WebSocket Login Fail！userIdClaim null");
-//            }
-
+            Map<String, List<String>> requestParameterMap = session.getRequestParameterMap();
+            List<String> tokens = requestParameterMap.get("token");
+            if (CollectionUtils.isEmpty(tokens)) {
+                LOGGER.error("WebSocket Login Fail: token null!");
+                return;
+            }
+            String token = tokens.get(0).replaceFirst(TokenConstants.PREFIX, "");
+            boolean verify = JwtUtils.verify(token);
+            if (!verify) {
+                LOGGER.error("WebSocket Login Fail: token fail!");
+                return;
+            }
             if (!SESSION_MAP.containsKey(username)) {
                 SESSION_MAP.put(username, session);
             }
