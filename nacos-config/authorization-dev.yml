@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/rs_cloud
+    username: root
+    password: 990115
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 990115
+    database: 0
+  security:
+    user:
+      name: security
+      password: security
+mybatis-plus:
+  mapper-locations: classpath:mapper/xml/*.xml

@@ -1,173 +1,241 @@
-DROP TABLE IF EXISTS rs_article;
-CREATE TABLE `rs_article` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) DEFAULT NULL,
-  `content` text,
-  `create_by` varchar(50) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `type` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*
+ Navicat Premium Data Transfer
 
-DROP TABLE IF EXISTS rs_article_file;
-CREATE TABLE `rs_article_file` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `article_id` int DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
-  `seq` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ Source Server         : mysql
+ Source Server Type    : MySQL
+ Source Server Version : 80030
+ Source Host           : localhost:3306
+ Source Schema         : rs_cloud
 
-DROP TABLE IF EXISTS rs_article_tag;
-CREATE TABLE `rs_article_tag` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `article_id` int DEFAULT NULL,
-  `tag_id` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ Target Server Type    : MySQL
+ Target Server Version : 80030
+ File Encoding         : 65001
 
-DROP TABLE IF EXISTS rs_article_upvote;
-CREATE TABLE `rs_article_upvote` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `article_id` int DEFAULT NULL,
-  `upvote_by` varchar(50) DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
-  `exists_key` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_unique_exists_key` (`exists_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ Date: 22/07/2024 20:38:46
+*/
 
-DROP TABLE IF EXISTS rs_comment;
-CREATE TABLE `rs_comment` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `parent_id` int DEFAULT NULL,
-  `article_id` int DEFAULT NULL,
-  `content` varchar(1000) DEFAULT NULL,
-  `create_by` varchar(50) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS rs_file;
-CREATE TABLE `rs_file` (
+-- ----------------------------
+-- Table structure for rs_article
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_article`;
+CREATE TABLE `rs_article`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `url` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
+  `create_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `create_time` datetime NULL DEFAULT NULL,
+  `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
-DROP TABLE IF EXISTS rs_oper_log;
-CREATE TABLE `rs_oper_log` (
+-- ----------------------------
+-- Table structure for rs_article_file
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_article_file`;
+CREATE TABLE `rs_article_file`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) DEFAULT NULL,
-  `method` varchar(100) DEFAULT NULL,
-  `request_method` varchar(50) DEFAULT NULL,
-  `oper_by` varchar(50) DEFAULT NULL,
-  `oper_url` varchar(255) DEFAULT NULL,
-  `oper_param` varchar(255) DEFAULT NULL,
-  `oper_result` varchar(1000) DEFAULT NULL,
-  `error_msg` varchar(1000) DEFAULT NULL,
-  `oper_time` datetime DEFAULT NULL,
-  `cost_time` bigint DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `article_id` int NULL DEFAULT NULL,
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `seq` int NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
-DROP TABLE IF EXISTS rs_role;
-CREATE TABLE `rs_role` (
+-- ----------------------------
+-- Table structure for rs_article_tag
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_article_tag`;
+CREATE TABLE `rs_article_tag`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `article_id` int NULL DEFAULT NULL,
+  `tag_id` int NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
-DROP TABLE IF EXISTS rs_schedule_job;
-CREATE TABLE `rs_schedule_job` (
+-- ----------------------------
+-- Table structure for rs_article_upvote
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_article_upvote`;
+CREATE TABLE `rs_article_upvote`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `job_name` varchar(100) DEFAULT NULL,
-  `job_group` varchar(100) DEFAULT NULL,
-  `invoke_target` varchar(255) DEFAULT NULL,
-  `cron_expression` varchar(100) DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
-  `create_by` varchar(50) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `update_by` varchar(50) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `article_id` int NULL DEFAULT NULL,
+  `upvote_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `exists_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `idx_unique_exists_key`(`exists_key`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 24288 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
-DROP TABLE IF EXISTS rs_schedule_job_log;
-CREATE TABLE `rs_schedule_job_log` (
+-- ----------------------------
+-- Table structure for rs_comment
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_comment`;
+CREATE TABLE `rs_comment`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `job_name` varchar(100) DEFAULT NULL,
-  `job_group` varchar(100) DEFAULT NULL,
-  `invoke_target` varchar(255) DEFAULT NULL,
-  `message` varchar(100) DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
-  `start_by` varchar(50) DEFAULT NULL,
-  `start_ime` datetime DEFAULT NULL,
-  `end_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `parent_id` int NULL DEFAULT NULL,
+  `article_id` int NULL DEFAULT NULL,
+  `content` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `create_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `create_time` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
-DROP TABLE IF EXISTS rs_tag;
-CREATE TABLE `rs_tag` (
+-- ----------------------------
+-- Table structure for rs_file
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_file`;
+CREATE TABLE `rs_file`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `code` varchar(50) DEFAULT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
-  `create_by` varchar(50) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `update_by` varchar(50) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `create_time` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 89 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
-DROP TABLE IF EXISTS rs_user;
-CREATE TABLE `rs_user` (
+-- ----------------------------
+-- Table structure for rs_message
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_message`;
+CREATE TABLE `rs_message`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nickname` varchar(50) DEFAULT NULL,
-  `username` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `avatar` varchar(255) DEFAULT NULL,
-  `sex` varchar(5) DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL,
-  `phone` varchar(50) DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
-  `signature` varchar(255) DEFAULT NULL,
-  `background` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `article_id` int NULL DEFAULT NULL,
+  `create_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `create_time` datetime NULL DEFAULT NULL,
+  `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
-DROP TABLE IF EXISTS rs_user_role;
-CREATE TABLE `rs_user_role` (
+-- ----------------------------
+-- Table structure for rs_oper_log
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_oper_log`;
+CREATE TABLE `rs_oper_log`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
-  `role_id` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `method` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `request_method` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `oper_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `oper_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `oper_param` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `oper_result` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `error_msg` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `oper_time` datetime NULL DEFAULT NULL,
+  `cost_time` bigint NULL DEFAULT NULL,
+  `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
-DROP TABLE IF EXISTS rs_message;
-CREATE TABLE `rs_message` (
+-- ----------------------------
+-- Table structure for rs_role
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_role`;
+CREATE TABLE `rs_role`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `article_id` int DEFAULT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `type` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
-CREATE TABLE `undo_log` (
+-- ----------------------------
+-- Table structure for rs_schedule_job
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_schedule_job`;
+CREATE TABLE `rs_schedule_job`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `job_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `job_group` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `invoke_target` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `cron_expression` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `create_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `create_time` datetime NULL DEFAULT NULL,
+  `update_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `update_time` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for rs_schedule_job_log
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_schedule_job_log`;
+CREATE TABLE `rs_schedule_job_log`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `job_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `job_group` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `invoke_target` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `message` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `start_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `start_ime` datetime NULL DEFAULT NULL,
+  `end_time` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for rs_tag
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_tag`;
+CREATE TABLE `rs_tag`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `create_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `create_time` datetime NULL DEFAULT NULL,
+  `update_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `update_time` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for rs_user
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_user`;
+CREATE TABLE `rs_user`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nickname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `sex` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `phone` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `signature` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `background` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `index_username`(`username`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 83 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for rs_user_role
+-- ----------------------------
+DROP TABLE IF EXISTS `rs_user_role`;
+CREATE TABLE `rs_user_role`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NULL DEFAULT NULL,
+  `role_id` int NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for undo_log
+-- ----------------------------
+DROP TABLE IF EXISTS `undo_log`;
+CREATE TABLE `undo_log`  (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `branch_id` bigint NOT NULL,
-  `xid` varchar(100) NOT NULL,
-  `context` varchar(128) NOT NULL,
+  `xid` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `context` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `rollback_info` longblob NOT NULL,
   `log_status` int NOT NULL,
   `log_created` datetime NOT NULL,
   `log_modified` datetime NOT NULL,
-  `ext` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `ux_undo_log` (`xid`,`branch_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `ext` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `ux_undo_log`(`xid`, `branch_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 90 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
