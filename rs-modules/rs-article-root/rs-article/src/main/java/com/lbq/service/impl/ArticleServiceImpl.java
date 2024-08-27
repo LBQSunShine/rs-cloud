@@ -117,9 +117,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         ori.setTitle(article.getTitle());
         ori.setType(article.getType());
         ori.setContent(article.getContent());
-        // 先删除原来的标签，再新增新的标签
-        articleTagService.removeByArticleId(article.getId());
-        articleTagService.saveByArticle(article.getId(), tagIds);
+        boolean update = super.updateById(ori);
+        if (update) {
+            // 先删除原来的标签，再新增新的标签
+            articleTagService.removeByArticleId(article.getId());
+            articleTagService.saveByArticle(article.getId(), tagIds);
+        }
     }
 
     @Override
