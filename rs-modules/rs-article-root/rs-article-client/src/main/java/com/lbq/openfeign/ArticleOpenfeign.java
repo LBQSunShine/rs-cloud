@@ -1,6 +1,6 @@
 package com.lbq.openfeign;
 
-import com.lbq.config.OpenfeignConfig;
+import com.lbq.config.OpenfeignFormConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import java.util.List;
  * @Version: 1.0
  */
 @Component
-@FeignClient(value = "article", configuration = OpenfeignConfig.class)
+@FeignClient(value = "article", configuration = OpenfeignFormConfig.class)
 public interface ArticleOpenfeign {
 
     @PostMapping("/article/openfeign/saveArticleUpvote")

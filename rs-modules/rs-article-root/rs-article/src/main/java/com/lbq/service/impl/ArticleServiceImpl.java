@@ -69,9 +69,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      */
     @PostConstruct
     public void init() {
+        articleUpvoteService.saveArticleUpvote();
         List<Article> list = super.list();
         for (Article article : list) {
-            String key = ArticleConstants.UPVOTE_COUNT + article.getId();
+            String key = ArticleConstants.TOTAL_UPVOTE + article.getId();
             if (!redisService.hasKey(key)) {
                 int count = articleUpvoteService.countByArticleId(article.getId());
                 redisService.set(key, count);
@@ -154,7 +155,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             map.put(hKey, StatusConstants.STATUS_1);
             redisService.hSet(key, map);
         }
-        String countKey = ArticleConstants.UPVOTE_COUNT + id;
+        String countKey = ArticleConstants.TOTAL_UPVOTE + id;
         if (!redisService.hasKey(countKey)) {
             int count = articleUpvoteService.countByArticleId(article.getId());
             count++;
@@ -177,7 +178,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             map.put(hKey, StatusConstants.STATUS_0);
             redisService.hSet(key, map);
         }
-        String countKey = ArticleConstants.UPVOTE_COUNT + id;
+        String countKey = ArticleConstants.TOTAL_UPVOTE + id;
         if (!redisService.hasKey(countKey)) {
             int count = articleUpvoteService.countByArticleId(article.getId());
             count--;
@@ -264,7 +265,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 tagVos.add(tagVoMap.get(articleTag.getTagId()));
             }
             articleVo.setTagVos(tagVos);
-            String countKey = ArticleConstants.UPVOTE_COUNT + id;
+            String countKey = ArticleConstants.TOTAL_UPVOTE + id;
             int count = 0;
             if (!redisService.hasKey(countKey)) {
                 count = articleUpvoteService.countByArticleId(id);
