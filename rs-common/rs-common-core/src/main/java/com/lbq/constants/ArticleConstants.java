@@ -9,4 +9,6 @@ package com.lbq.constants;
  */
 public interface ArticleConstants {
     String UPVOTE = "upvote";
+
+    String UPVOTE_COUNT = "upvote_count";
 }

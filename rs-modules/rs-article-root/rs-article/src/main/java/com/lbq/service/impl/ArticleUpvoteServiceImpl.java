@@ -2,6 +2,7 @@ package com.lbq.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lbq.constants.ArticleConstants;
 import com.lbq.constants.StatusConstants;
@@ -35,19 +36,28 @@ public class ArticleUpvoteServiceImpl extends ServiceImpl<ArticleUpvoteMapper, A
     public void saveArticleUpvote() {
         List<Map<String, String>> mapList = redisService.hGetValuesWithPrefix(ArticleConstants.UPVOTE);
         try {
-            List<ArticleUpvote> articleUpvoteList = new ArrayList<>();
             for (Map<String, String> item : mapList) {
                 Iterator<Map.Entry<String, String>> iterator = item.entrySet().iterator();
+                String k = "";
+                List<String> ks = new ArrayList<>();
+                List<ArticleUpvote> articleUpvoteList = new ArrayList<>();
                 while (iterator.hasNext()) {
                     Map.Entry<String, String> next = iterator.next();
                     String key = next.getKey();
                     String[] split = key.split("::");
                     String value = next.getValue();
+                    if (StringUtils.isBlank(k)) {
+                        k = ArticleConstants.UPVOTE + split[0];
+                    }
+                    ks.add(key);
                     ArticleUpvote articleUpvote = new ArticleUpvote(split[0], split[1], value, key);
                     articleUpvoteList.add(articleUpvote);
                 }
                 if (CollectionUtils.isNotEmpty(articleUpvoteList)) {
                     articleUpvoteMapper.saveArticleUpvote(articleUpvoteList);
+                }
+                for (String kItem : ks) {
+                    redisService.hDeleteValue(k, kItem);
                 }
                 this.removeUnUpvote();
             }
@@ -80,5 +90,32 @@ public class ArticleUpvoteServiceImpl extends ServiceImpl<ArticleUpvoteMapper, A
         LambdaQueryWrapper<ArticleUpvote> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(ArticleUpvote::getArticleId, articleIds);
         super.remove(queryWrapper);
+    }
+
+    @Override
+    public int countByArticleId(Integer articleId) {
+        LambdaQueryWrapper<ArticleUpvote> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(ArticleUpvote::getArticleId, articleId)
+                .eq(ArticleUpvote::getStatus, StatusConstants.STATUS_1);
+        return (int) super.count(queryWrapper);
+    }
+
+    @Override
+    public boolean isUpvoteByArticleIdAndUsername(Integer articleId, String username) {
+        String key = ArticleConstants.UPVOTE + username;
+        String hKey = username + "::" + articleId;
+        String status = redisService.hGetValue(key, hKey);
+        if (StatusConstants.STATUS_1.equals(status)) {
+            return true;
+        } else if (StatusConstants.STATUS_0.equals(status)) {
+            return false;
+        }
+        LambdaQueryWrapper<ArticleUpvote> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(ArticleUpvote::getArticleId, articleId)
+                .eq(ArticleUpvote::getUpvoteBy, username)
+                .eq(ArticleUpvote::getStatus, StatusConstants.STATUS_1);
+        return super.count(queryWrapper) > 0;
     }
 }

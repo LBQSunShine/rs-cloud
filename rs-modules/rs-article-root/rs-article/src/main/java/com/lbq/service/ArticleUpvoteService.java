@@ -21,4 +21,8 @@ public interface ArticleUpvoteService extends IService<ArticleUpvote> {
     void removeUnUpvote();
 
     void removeByArticleIds(Collection<Integer> articleIds);
+
+    int countByArticleId(Integer articleId);
+
+    boolean isUpvoteByArticleIdAndUsername(Integer articleId, String username);
 }

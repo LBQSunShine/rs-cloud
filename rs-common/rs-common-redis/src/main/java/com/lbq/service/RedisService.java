@@ -1,7 +1,9 @@
 package com.lbq.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -208,5 +210,15 @@ public class RedisService {
             }
         }
         return resMapList;
+    }
+
+    /**
+     * 根据传入的key值，原子性执行加一或减一
+     *
+     * @param key
+     * @param number
+     */
+    public void increment(String key, Integer number) {
+        redisTemplate.opsForValue().increment(key, number);
     }
 }

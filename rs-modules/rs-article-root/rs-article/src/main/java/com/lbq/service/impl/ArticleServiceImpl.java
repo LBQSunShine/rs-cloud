@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -62,6 +63,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private MessageService messageService;
+
+    /**
+     * 项目启动时初始化各文章总点赞数
+     */
+    @PostConstruct
+    public void init() {
+        List<Article> list = super.list();
+        for (Article article : list) {
+            String key = ArticleConstants.UPVOTE_COUNT + article.getId();
+            if (!redisService.hasKey(key)) {
+                int count = articleUpvoteService.countByArticleId(article.getId());
+                redisService.set(key, count);
+            }
+        }
+    }
 
     @Override
     public Page<ArticleVo> page(PageVo pageVo, String keyword, String selectType, Collection<Integer> tagIds) {
@@ -138,9 +154,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             map.put(hKey, StatusConstants.STATUS_1);
             redisService.hSet(key, map);
         }
-        // 十分钟
-        long expireTime = 10 * 60;
-        redisService.expire(key, expireTime);
+        String countKey = ArticleConstants.UPVOTE_COUNT + id;
+        if (!redisService.hasKey(countKey)) {
+            int count = articleUpvoteService.countByArticleId(article.getId());
+            count++;
+            redisService.set(countKey, count);
+        } else {
+            redisService.increment(countKey, 1);
+        }
     }
 
     @Override
@@ -156,9 +177,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             map.put(hKey, StatusConstants.STATUS_0);
             redisService.hSet(key, map);
         }
-        // 十分钟
-        long expireTime = 10 * 60;
-        redisService.expire(key, expireTime);
+        String countKey = ArticleConstants.UPVOTE_COUNT + id;
+        if (!redisService.hasKey(countKey)) {
+            int count = articleUpvoteService.countByArticleId(article.getId());
+            count--;
+            redisService.set(countKey, count);
+        } else {
+            redisService.increment(countKey, -1);
+        }
     }
 
     @Override
@@ -238,14 +264,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 tagVos.add(tagVoMap.get(articleTag.getTagId()));
             }
             articleVo.setTagVos(tagVos);
-            List<ArticleUpvote> articleUpvotes = articleUpvoteService.listByArticleId(id);
-            articleVo.setArticleUpvotes(articleUpvotes);
-            articleVo.setUpvoteStatus(StatusConstants.STATUS_0);
-            ArticleUpvote articleUpvote = articleUpvotes.stream().filter(item -> item.getUpvoteBy().equals(BaseContext.getUsername()) && StatusConstants.STATUS_1.equals(item.getStatus())).findFirst().orElse(null);
-            if (articleUpvote != null) {
-                articleVo.setUpvoteStatus(StatusConstants.STATUS_1);
+            String countKey = ArticleConstants.UPVOTE_COUNT + id;
+            int count = 0;
+            if (!redisService.hasKey(countKey)) {
+                count = articleUpvoteService.countByArticleId(id);
+                redisService.set(countKey, count);
+            } else {
+                count = redisService.get(countKey);
             }
-            articleVo.setUpvoteSize(articleUpvotes.size());
+            articleVo.setUpvoteSize(count);
+            boolean isUpvote = articleUpvoteService.isUpvoteByArticleIdAndUsername(id, BaseContext.getUsername());
+            if (isUpvote) {
+                articleVo.setUpvoteStatus(StatusConstants.STATUS_1);
+            } else {
+                articleVo.setUpvoteStatus(StatusConstants.STATUS_0);
+            }
             if (isDetail) {
                 List<Comment> comments = commentService.listByArticleId(id);
                 List<String> usernames = comments.stream().map(Comment::getCreateBy).collect(Collectors.toList());
