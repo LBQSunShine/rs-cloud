@@ -11,4 +11,8 @@ public interface ArticleConstants {
     String UPVOTE = "upvote";
 
     String TOTAL_UPVOTE = "total_upvote";
+
+    String DRAFT = "draft";
+
+    String PUBLISH = "publish";
 }

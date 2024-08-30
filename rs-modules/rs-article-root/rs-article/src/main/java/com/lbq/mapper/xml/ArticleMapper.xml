@@ -8,7 +8,8 @@
             ra.content,
             ra.type,
             ra.create_by,
-            ra.create_time
+            ra.create_time,
+            ra.status
         from rs_article ra
         left join rs_article_tag rat on rat.article_id = ra.id
         <where>
@@ -17,6 +18,9 @@
             </if>
             <if test="username != null and username != ''">
                 and (ra.create_by = #{username})
+            </if>
+            <if test="username == null">
+                and (ra.status = 'publish')
             </if>
             <if test="tagIds != null and tagIds.size() != 0">
                 and (rat.tag_id in

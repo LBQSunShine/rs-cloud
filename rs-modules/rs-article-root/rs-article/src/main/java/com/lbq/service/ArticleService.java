@@ -24,9 +24,11 @@ public interface ArticleService extends IService<Article> {
 
     ArticleVo getById(Integer id);
 
-    void add(ArticleVo articleVo);
+    Integer add(ArticleVo articleVo);
 
-    void edit(ArticleVo articleVo);
+    Integer edit(ArticleVo articleVo);
+
+    void publish(List<Integer> ids);
 
     void upvote(Article article);
 

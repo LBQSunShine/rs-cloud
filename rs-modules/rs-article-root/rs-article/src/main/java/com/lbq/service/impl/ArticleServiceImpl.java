@@ -2,6 +2,7 @@ package com.lbq.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -107,8 +108,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     @Transactional
-    public void add(ArticleVo articleVo) {
+    public Integer add(ArticleVo articleVo) {
         Article article = articleVo.getArticle();
+        article.setStatus(ArticleConstants.DRAFT);
         article.setCreateBy(BaseContext.getUsername());
         article.setCreateTime(new Date());
         boolean save = super.save(article);
@@ -119,11 +121,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<Integer> tagIds = tagVos.stream().map(TagVo::getId).collect(Collectors.toList());
         articleTagService.saveByArticle(article.getId(), tagIds);
         articleFileService.saveByArticle(article.getId(), articleVo.getArticleFiles());
+        return article.getId();
     }
 
     @Override
     @Transactional
-    public void edit(ArticleVo articleVo) {
+    public Integer edit(ArticleVo articleVo) {
         Article article = articleVo.getArticle();
         List<TagVo> tagVos = articleVo.getTagVos();
         List<Integer> tagIds = tagVos.stream().map(TagVo::getId).collect(Collectors.toList());
@@ -139,6 +142,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             // 先删除原来的标签，再新增新的标签
             articleTagService.removeByArticleId(article.getId());
             articleTagService.saveByArticle(article.getId(), tagIds);
+        }
+        return article.getId();
+    }
+
+    @Override
+    public void publish(List<Integer> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return;
+        }
+        for (Integer id : ids) {
+            LambdaUpdateWrapper<Article> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper
+                    .eq(Article::getId, id)
+                    .set(Article::getStatus, ArticleConstants.PUBLISH);
+            super.update(updateWrapper);
         }
     }
 

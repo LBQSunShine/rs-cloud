@@ -48,14 +48,20 @@ public class ArticleController {
 
     @PostMapping("/add")
     public R<?> add(@RequestBody ArticleVo articleVo) {
-        articleService.add(articleVo);
-        return R.success("发布成功!");
+        Integer id = articleService.add(articleVo);
+        return R.success("保存成功!", id);
     }
 
     @PostMapping("/edit")
     public R<?> edit(@RequestBody ArticleVo articleVo) {
-        articleService.edit(articleVo);
-        return R.success("修改成功!");
+        Integer id = articleService.edit(articleVo);
+        return R.success("保存成功!", id);
+    }
+
+    @PostMapping("/publish")
+    public R<?> publish(@RequestBody IdsReq idsReq) {
+        articleService.publish(idsReq.getIds());
+        return R.success("发布成功!");
     }
 
     @PostMapping("/delete")
